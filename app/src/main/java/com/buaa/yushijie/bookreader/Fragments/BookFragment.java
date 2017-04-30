@@ -1,5 +1,6 @@
 package com.buaa.yushijie.bookreader.Fragments;
 
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.buaa.yushijie.bookreader.Activities.BookDetailActivity;
 import com.buaa.yushijie.bookreader.JavaBean.Books;
 import com.buaa.yushijie.bookreader.R;
 
@@ -77,6 +79,13 @@ public class BookFragment extends Fragment {
             mBookAuthorNameTextView = (TextView)itemView.findViewById(R.id.book_author_name);
             mBookReadCountTextView  =(TextView)itemView.findViewById(R.id.book_read_count);
             mBookCollectionCountTextView = (TextView)itemView.findViewById(R.id.book_collection_count);
+            itemView.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getActivity(), BookDetailActivity.class));
+                }
+            });
         }
 
         public void bindBooksData(Books book){
