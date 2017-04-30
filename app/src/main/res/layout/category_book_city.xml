@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                style="@style/CategoryUpStyle"
+                android:text="男频" />
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15sp"
+                android:columnCount="2"
+                android:rowCount="2">
+
+                <TextView
+                    style="@style/CategoryDownStyle"
+                    android:text="玄幻修仙"
+                    android:layout_column="0"
+                    android:layout_row="0"
+                    />
+                <TextView
+                    style="@style/CategoryDownStyle"
+                    android:text="武侠"
+                    android:layout_column="1"
+                    android:layout_row="0"
+                    android:layout_marginLeft="50sp"/>
+
+                <TextView
+                    style="@style/CategoryDownStyle"
+                    android:text="仙侠幻情"
+                    android:layout_column="0"
+                    android:layout_row="1"
+                    />
+                <TextView
+                    style="@style/CategoryDownStyle"
+                    android:text="军事竞技"
+                    android:layout_column="1"
+                    android:layout_row="1"
+                    android:layout_marginLeft="50sp"/>
+            </GridLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
