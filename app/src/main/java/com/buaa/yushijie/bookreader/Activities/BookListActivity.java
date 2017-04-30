@@ -15,7 +15,7 @@ public class BookListActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.book_detail_layout);
+        setContentView(R.layout.book_fragment_recycle_layout);
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction().replace(R.id.book_list_container,new BookFragment()).commit();
     }
