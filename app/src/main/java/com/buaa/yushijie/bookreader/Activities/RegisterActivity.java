@@ -92,7 +92,7 @@ public class RegisterActivity extends AppCompatActivity {
     public void httpConnectionPostRegiterInfo(){
         HttpURLConnection conn = null;
         try {
-            URL url = new URL("http://115.25.144.135:8080/register");
+            URL url = new URL("http://120.25.89.166/BookReaderServer/register");
             conn =(HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setDoInput(true);

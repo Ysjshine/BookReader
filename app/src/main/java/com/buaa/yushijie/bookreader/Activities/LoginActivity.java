@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
     public void httpConnectionPost(){
         HttpURLConnection conn = null;
         try {
-            URL url = new URL("http://115.25.144.135:8080/login");
+            URL url = new URL("http://120.25.89.166/BookReaderServer/login");
             conn =(HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setDoInput(true);
