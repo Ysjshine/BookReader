@@ -19,7 +19,7 @@ import com.buaa.yushijie.bookreader.Fragments.NavigationFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Fragment citynavigationFragement = new NavigationFragment();
+    private Fragment cityNavigationFragment = new NavigationFragment();
     private Fragment bookshelfNavigationFragment = new MyBookShelfNavigationFragment();
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.navigation_container,citynavigationFragement)
+                            .replace(R.id.navigation_container,cityNavigationFragment)
                             .commit();
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.book_category_container,new BookCategoryFragment())
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.book_category_container,new BookCategoryFragment())
                 .commit();
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.navigation_container,citynavigationFragement)
+                .add(R.id.navigation_container,cityNavigationFragment)
                 .commit();
     }
 

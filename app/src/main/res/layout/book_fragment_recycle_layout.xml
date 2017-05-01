@@ -7,7 +7,30 @@
         android:layout_height="wrap_content"
         android:id="@+id/navigation_container_book_list">
     </FrameLayout>
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorNavigationBackground">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="30sp"
+            android:layout_weight="2"
+            android:text="排序方式"
+            android:gravity="center_vertical"
+            android:textSize="20sp"
+            android:textColor="#000000"
+            />
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="阅读数"/>
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="收藏数"/>
+    </LinearLayout>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
