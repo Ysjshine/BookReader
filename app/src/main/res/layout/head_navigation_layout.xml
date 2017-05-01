@@ -3,7 +3,7 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#87CEFA">
+    android:background="@color/colorNavigationBackground">
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,5 +14,5 @@
         android:layout_height="wrap_content"
         android:iconifiedByDefault="false"
         android:focusable="false"
-        android:queryHint="search"/>
+        android:queryHint="search" />
 </LinearLayout>

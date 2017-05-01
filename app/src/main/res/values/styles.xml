@@ -7,4 +7,9 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+    <style name="searchView">
+        <item name="android:editTextColor">@color/colorCategoryText</item>
+        <item name="android:textColorHint">@color/colorCategoryText</item>
+    </style>
 </resources>

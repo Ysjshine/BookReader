@@ -5,5 +5,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorCategoryText">#FFFFFF</color>
     <color name="colorCategoryUpBackground">#CDCDB4</color>
-    <color name="colorCatagortDownBackground">#1E90FF</color>
+    <color name="colorCatagoryDownBackground">#1E90FF</color>
+    <color name="colorNavigationBackground">#E8E8E8</color>
 </resources>

@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 
 import com.buaa.yushijie.bookreader.Fragments.BookDatailFragment;
+import com.buaa.yushijie.bookreader.Fragments.BookDatailNavigationFragment;
 import com.buaa.yushijie.bookreader.Fragments.CommentRecyclerFragmemt;
 import com.buaa.yushijie.bookreader.Fragments.NavigationFragment;
 import com.buaa.yushijie.bookreader.R;
@@ -19,7 +20,7 @@ public class BookDetailActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_datail_layout);
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.navigation_book_datail_container,new NavigationFragment())
+                .add(R.id.navigation_book_datail_container,new BookDatailNavigationFragment())
                 .commit();
 
         getSupportFragmentManager().beginTransaction()

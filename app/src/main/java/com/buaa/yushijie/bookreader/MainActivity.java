@@ -14,12 +14,13 @@ import com.buaa.yushijie.bookreader.Activities.BookDetailActivity;
 import com.buaa.yushijie.bookreader.Activities.BookListActivity;
 import com.buaa.yushijie.bookreader.Fragments.BookCategoryFragment;
 import com.buaa.yushijie.bookreader.Fragments.BookFragment;
+import com.buaa.yushijie.bookreader.Fragments.MyBookShelfNavigationFragment;
 import com.buaa.yushijie.bookreader.Fragments.NavigationFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Fragment navigationFragement = new NavigationFragment();
-
+    private Fragment citynavigationFragement = new NavigationFragment();
+    private Fragment bookshelfNavigationFragment = new MyBookShelfNavigationFragment();
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -27,25 +28,24 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                   // mTextMessage.setText(R.string.title_home);
                     getSupportFragmentManager().beginTransaction()
-                            .show(navigationFragement).commit();
+                            .replace(R.id.navigation_container,citynavigationFragement)
+                            .commit();
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.book_category_container,new BookCategoryFragment())
                             .commit();
                     return true;
                 case R.id.navigation_dashboard:
                     getSupportFragmentManager().beginTransaction()
-                            .hide(navigationFragement).commit();
+                            .replace(R.id.navigation_container,bookshelfNavigationFragment)
+                            .commit();
                     FragmentManager fm1 = getSupportFragmentManager();
                     fm1.beginTransaction().replace(R.id.book_category_container,new BookFragment()).commit();
 
-                   // mTextMessage.setText(R.string.title_dashboard);
                     return true;
                 case R.id.navigation_notifications:
                     Intent i = new Intent(MainActivity.this, BookListActivity.class);
                     startActivity(i);
-                    //mTextMessage.setText(R.string.title_notifications);
                     return true;
             }
             return false;
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.book_category_container,new BookCategoryFragment())
                 .commit();
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.navigation_container,navigationFragement)
+                .add(R.id.navigation_container,citynavigationFragement)
                 .commit();
     }
 
