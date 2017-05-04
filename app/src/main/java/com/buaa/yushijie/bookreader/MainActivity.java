@@ -14,6 +14,7 @@ import com.buaa.yushijie.bookreader.Activities.BookDetailActivity;
 import com.buaa.yushijie.bookreader.Activities.BookListActivity;
 import com.buaa.yushijie.bookreader.Fragments.BookCategoryFragment;
 import com.buaa.yushijie.bookreader.Fragments.BookFragment;
+import com.buaa.yushijie.bookreader.Fragments.MyBookShelfMainPartFragment;
 import com.buaa.yushijie.bookreader.Fragments.MyBookShelfNavigationFragment;
 import com.buaa.yushijie.bookreader.Fragments.NavigationFragment;
 
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
                             .replace(R.id.navigation_container,bookshelfNavigationFragment)
                             .commit();
                     FragmentManager fm1 = getSupportFragmentManager();
-                    fm1.beginTransaction().replace(R.id.book_category_container,new BookFragment()).commit();
+                    fm1.beginTransaction().replace(R.id.book_category_container,new MyBookShelfMainPartFragment()).commit();
 
                     return true;
                 case R.id.navigation_notifications:

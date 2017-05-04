@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/my_book_shelf_book_cover"
+        android:layout_width="match_parent"
+        android:layout_height="100sp"
+        android:src="@mipmap/cover"
+        android:layout_weight="2"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100sp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/my_book_shelf_book_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="工作大揭秘"
+            android:textSize="30sp"
+            android:gravity="center_vertical"
+            android:layout_weight="2"/>
+        <TextView
+            android:id="@+id/my_book_shelf_book_author_name"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:layout_height="match_parent"
+            android:text="作者：马丁卢德军"
+            android:layout_weight="3"/>
+    </LinearLayout>
+</LinearLayout>
