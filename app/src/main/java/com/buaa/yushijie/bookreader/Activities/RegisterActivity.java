@@ -70,7 +70,10 @@ public class RegisterActivity extends AppCompatActivity {
                 }else if(!mPassword.getText().toString().equals(mPasswordAgain.getText().toString())){
                     Toast.makeText(RegisterActivity.this,"密码不一致",Toast.LENGTH_SHORT).show();
                     mPasswordAgain.setText("");
-                }else{
+                }else if(mPassword.getText().toString().length()<6){
+                    Toast.makeText(RegisterActivity.this,"密码长度不得少于六位",Toast.LENGTH_SHORT).show();
+                }
+                else{
                     if(mMale.isChecked()){
                         gender = "0";
                     }else if(mFemale.isChecked()){

@@ -15,13 +15,19 @@ import android.widget.Toast;
 import com.buaa.yushijie.bookreader.MainActivity;
 import com.buaa.yushijie.bookreader.R;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import bean.UserBean;
 
 /**
  * Created by yushijie on 17-5-1.
@@ -101,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
             dos.close();
             InputStream in = conn.getInputStream();
             InputStreamReader inr = new InputStreamReader(in);
-            BufferedReader bf = new BufferedReader(inr);
+           BufferedReader bf = new BufferedReader(inr);
             StringBuilder sb = new StringBuilder();
             String sa = null;
             while((sa  = bf.readLine())!=null){
@@ -119,6 +125,7 @@ public class LoginActivity extends AppCompatActivity {
             in.close();
             inr.close();
             bf.close();
+
 
         }catch (Exception e){
             e.printStackTrace();
