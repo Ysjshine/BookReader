@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.os.EnvironmentCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-
+import com.buaa.yushijie.bookreader.Services.AsynTaskLoadImg;
 import bean.BookBean;
 
 /**
@@ -61,9 +62,10 @@ public class BookFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        cache = new File(Environment.getExternalStorageDirectory(), "cache");
+        cache = new File(getActivity().getCacheDir(), "cache");
         if (!cache.exists()) {
             cache.mkdirs();
+            Log.e("ssssssss", "onCreate: "+cache );
         }
     }
 
@@ -93,15 +95,7 @@ public class BookFragment extends Fragment {
         return v;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        File[] files = cache.listFiles();
-        for (File file : files) {
-            file.delete();
-        }
-        cache.delete();
-    }
+
 
     private class BookHolder extends RecyclerView.ViewHolder {
         private ImageView mBookCoverImageView;
@@ -109,6 +103,7 @@ public class BookFragment extends Fragment {
         private TextView mBookAuthorNameTextView;
         private TextView mBookReadCountTextView;
         private TextView mBookCollectionCountTextView;
+        private BookBean book;
 
         public BookHolder(View itemView) {
             super(itemView);
@@ -121,18 +116,28 @@ public class BookFragment extends Fragment {
 
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(getActivity(), BookDetailActivity.class));
+                    Intent i = new Intent(getActivity(), BookDetailActivity.class);
+                    i.putExtra("BOOKITEM",book);
+                    startActivity(i);
                 }
             });
         }
 
-        public void bindBooksData(BookBean book) {
+        public BookBean getBook() {
+            return book;
+        }
+
+        public void setBook(BookBean book) {
+            this.book = book;
+        }
+
+        public void bindBooksData() {
             mBookTitleTextView.setText(book.title);
             mBookAuthorNameTextView.setText("作者：" + book.author);
             mBookReadCountTextView.setText("阅读数:" + book.readTimes);
             mBookCollectionCountTextView.setText("收藏数:" + book.collectTimes);
             DownLoadBookInfoService service = new DownLoadBookInfoService();
-            AsynTaskLoadImg task = new AsynTaskLoadImg(service,mBookCoverImageView);
+            AsynTaskLoadImg task = new AsynTaskLoadImg(service,mBookCoverImageView,cache);
             task.execute(book.imgSource);
         }
     }
@@ -154,7 +159,8 @@ public class BookFragment extends Fragment {
         @Override
         public void onBindViewHolder(BookHolder holder, int position) {
             BookBean book = mBooksLib.get(position);
-            holder.bindBooksData(book);
+            holder.setBook(book);
+            holder.bindBooksData();
         }
 
         @Override
@@ -162,32 +168,5 @@ public class BookFragment extends Fragment {
             return mBooksLib.size();
         }
 
-    }
-
-    private class AsynTaskLoadImg extends AsyncTask<String,Integer,Bitmap>{
-        private DownLoadBookInfoService service = new DownLoadBookInfoService();
-        private ImageView coverImage;
-
-        public AsynTaskLoadImg(DownLoadBookInfoService service,ImageView coverImage) {
-            super();
-            this.service = service;
-            this.coverImage = coverImage;
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            try{
-                return service.getImageURI(params[0],cache);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap uri) {
-            super.onPostExecute(uri);
-            coverImage.setImageBitmap(uri);
-        }
     }
 }
