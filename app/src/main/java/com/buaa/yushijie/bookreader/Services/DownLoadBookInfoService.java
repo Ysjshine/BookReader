@@ -23,7 +23,7 @@ import bean.BookBean;
  */
 
 public class DownLoadBookInfoService {
-
+    private static final String TAG = "DownLoadBookInfoService";
     public List<BookBean> getBookInfo(){
         List<BookBean> res = new ArrayList<>();
         HttpURLConnection conn = null;
@@ -42,7 +42,7 @@ public class DownLoadBookInfoService {
             while((b = (BookBean) ois.readObject()) != null){
                 res.add(b);
             }
-            Log.e("sssssssssss", "getBookInfo: "+res.size() );
+            Log.e("TAG", "getBookInfo: "+res.size() );
             in.close();
             ois.close();
         }catch (Exception e){
@@ -66,15 +66,18 @@ public class DownLoadBookInfoService {
                 conn.setDoInput(true);
                 conn.setRequestMethod("POST");
                 conn.connect();
-                Log.e("ssssssss", "onCreate: "+file );
+
                 InputStream in = conn.getInputStream();
                 BufferedInputStream bin = new BufferedInputStream(in);
+
                 Bitmap bp = BitmapFactory.decodeStream(bin);
                 FileOutputStream fos = new FileOutputStream(file);
                 BufferedOutputStream bitBins = new BufferedOutputStream(fos);
                 bp.compress(Bitmap.CompressFormat.JPEG,100,bitBins);
                 bitBins.flush();
                 fos.flush();
+
+
                 in.close();
                 bin.close();
                 fos.close();
