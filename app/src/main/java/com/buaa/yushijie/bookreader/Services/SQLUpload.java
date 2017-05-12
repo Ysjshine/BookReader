@@ -12,20 +12,26 @@ import java.net.URL;
 
 public class SQLUpload {
 
-    private static final String urlAddress = "";
-    public static void sendQueryString(String query){
-        HttpURLConnection conn = null;
+    private static final String SEND_CATEGORY = "";
+    private static HttpURLConnection conn = null;
+    private static URL url = null;
+
+    private static void connectToServer(String path) throws Exception{
+        url = new URL(path);
+        conn = (HttpURLConnection)url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setConnectTimeout(5000);
+        conn.setDoOutput(true);
+        conn.connect();
+    }
+
+    public static void sendCategoryString(String category){
         try{
-            URL url = new URL(urlAddress);
-            conn = (HttpURLConnection)url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setConnectTimeout(5000);
-            conn.setDoOutput(true);
-            conn.connect();
+            connectToServer(SEND_CATEGORY);
 
             DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
-            String querys = "qurey="+query;
-            dos.writeBytes(querys);
+            String categorys = "category="+category;
+            dos.writeBytes(categorys);
             dos.flush();
             dos.close();
 

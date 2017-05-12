@@ -32,9 +32,9 @@ import java.util.ArrayList;
 
 public class MyBookShelfMainPartFragment extends Fragment {
     private ExpandableListView mBookShelfExpandableListView;
-    private ArrayList<Books> bookItems;
     private ArrayList<ArrayList<Books>> bookItemsList = new ArrayList<>();
-    private ArrayList<String> categoryGroupName = new ArrayList<>();
+    public static ArrayList<String> categoryGroupName = new ArrayList<>();
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +42,7 @@ public class MyBookShelfMainPartFragment extends Fragment {
     public void getData(){
         categoryGroupName.add("我喜欢的书");
         categoryGroupName.add("文学风");
+
        for(int i=0;i<2;i++){
            ArrayList<Books> book = new ArrayList<>();
            for(int j=0;j<3;j++){
@@ -78,11 +79,16 @@ public class MyBookShelfMainPartFragment extends Fragment {
                 return false;
             }
         });
+
         getData();
         mBookShelfExpandableListView.setAdapter(new ExpandableListViewAdapter());
+
         return v;
     }
 
+
+
+    //adapter
     private class ExpandableListViewAdapter extends BaseExpandableListAdapter{
         @Override
         public int getGroupCount() {
@@ -176,12 +182,13 @@ public class MyBookShelfMainPartFragment extends Fragment {
         }
     }
 
+    //bookItems
     private class BookItemHolder{
         public ImageView cover;
         public TextView bookTitle;
         public TextView bookAuthor;
     }
-
+    //Category
     private class CategoryHolder{
         public TextView categoryName;
     }

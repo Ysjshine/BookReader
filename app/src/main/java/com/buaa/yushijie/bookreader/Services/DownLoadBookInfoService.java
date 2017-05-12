@@ -24,11 +24,12 @@ import bean.BookBean;
 
 public class DownLoadBookInfoService {
     private static final String TAG = "DownLoadBookInfoService";
-    public List<BookBean> getBookInfo(){
+    private static final String GETBOOKURL = "http://120.25.89.166/BookReaderServer/QueryBook?bookName=";
+    public List<BookBean> getBookInfo(String query){
         List<BookBean> res = new ArrayList<>();
         HttpURLConnection conn = null;
         try{
-            URL url = new URL("http://120.25.89.166/BookReaderServer/bookBean");
+            URL url = new URL(GETBOOKURL+java.net.URLEncoder.encode(query,"UTF-8"));
             conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
             conn.setDoInput(true);
@@ -55,7 +56,7 @@ public class DownLoadBookInfoService {
 
     public Uri getImageURI(String path,File cache){
         try{
-            String name = path.substring(path.indexOf("cover_"),path.indexOf(".jpg"));
+            String name = "cover_"+path.substring(path.indexOf("id=")+3);
             File file = new File(cache,name);
             if(file.exists()){
                return Uri.fromFile(file);
