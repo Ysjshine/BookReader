@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="用户名:"
+            android:textSize="30sp"
+            android:layout_weight="2"/>
+        <TextView
+            android:id="@+id/about_me_fragment_username_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="xx"
+            android:textSize="30sp"/>
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="昵称:"
+            android:textSize="30sp" />
+        <EditText
+            android:id="@+id/about_me_fragment_nickname_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="xxxx"/>
+        <Button
+            android:id="@+id/about_me_fragment_edit_nickname_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="edit"/>
+    </LinearLayout>
+    <Button
+        android:id="@+id/about_me_change_password_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="修改密码"
+        android:layout_marginTop="200sp"/>
+    <Button
+        android:id="@+id/about_me_login_out_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="注销登录"
+        android:layout_marginTop="20sp"/>
+</LinearLayout>

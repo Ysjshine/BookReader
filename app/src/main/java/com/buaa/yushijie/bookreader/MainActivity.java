@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.buaa.yushijie.bookreader.Activities.BookDetailActivity;
 import com.buaa.yushijie.bookreader.Activities.BookListActivity;
+import com.buaa.yushijie.bookreader.Fragments.AboutMeFragment;
+import com.buaa.yushijie.bookreader.Fragments.AboutMeNavigationFragment;
 import com.buaa.yushijie.bookreader.Fragments.BookCategoryFragment;
 import com.buaa.yushijie.bookreader.Fragments.BookFragment;
 import com.buaa.yushijie.bookreader.Fragments.MyBookShelfMainPartFragment;
@@ -22,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Fragment cityNavigationFragment = new NavigationFragment();
     private Fragment bookshelfNavigationFragment = new MyBookShelfNavigationFragment();
+    private Fragment bookCategoryFragment = new BookCategoryFragment();
+    private Fragment myBookShelfMainPartFragment = new MyBookShelfMainPartFragment();
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -33,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                             .replace(R.id.navigation_container,cityNavigationFragment)
                             .commit();
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.book_category_container,new BookCategoryFragment())
+                            .replace(R.id.book_category_container,bookCategoryFragment)
                             .commit();
                     return true;
                 case R.id.navigation_dashboard:
@@ -41,12 +45,14 @@ public class MainActivity extends AppCompatActivity {
                             .replace(R.id.navigation_container,bookshelfNavigationFragment)
                             .commit();
                     FragmentManager fm1 = getSupportFragmentManager();
-                    fm1.beginTransaction().replace(R.id.book_category_container,new MyBookShelfMainPartFragment()).commit();
-
+                    fm1.beginTransaction().replace(R.id.book_category_container,myBookShelfMainPartFragment).commit();
                     return true;
                 case R.id.navigation_notifications:
-                    Intent i = new Intent(MainActivity.this, BookListActivity.class);
-                    startActivity(i);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.navigation_container,new AboutMeNavigationFragment())
+                            .commit();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.book_category_container,new AboutMeFragment())
+                            .commit();
                     return true;
             }
             return false;

@@ -48,7 +48,11 @@ public class CategorySetDialogFragment extends DialogFragment {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        SQLUpload.sendCategoryString(category);
+                        try {
+                            SQLUpload.sendCategoryString(category);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }).start();
             }

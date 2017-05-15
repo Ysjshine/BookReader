@@ -84,6 +84,7 @@ public class LoginActivity extends AppCompatActivity {
         mRegisterButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+
                 startActivity(new Intent(LoginActivity.this,RegisterActivity.class));
             }
         });
@@ -115,7 +116,9 @@ public class LoginActivity extends AppCompatActivity {
             }
             Log.e(TAG, "httpConnectionPost: "+sb.toString() );
             if(sb.toString().equals("1")){
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                Intent login = new Intent(LoginActivity.this,MainActivity.class);
+                login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(login);
             }
             else {
                 Message msg = new Message();
