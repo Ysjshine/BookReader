@@ -79,6 +79,7 @@ public class BookFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         cache = new File(getActivity().getCacheDir(), "cache");
+        Log.e(TAG, "onCreate: "+cache );
         if (!cache.exists()) {
             cache.mkdirs();
             Log.e(TAG, "onCreate: "+cache );
@@ -179,6 +180,8 @@ public class BookFragment extends Fragment {
             mBookAuthorNameTextView = (TextView) itemView.findViewById(R.id.book_author_name);
             mBookReadCountTextView = (TextView) itemView.findViewById(R.id.book_read_count);
             mBookCollectionCountTextView = (TextView) itemView.findViewById(R.id.book_collection_count);
+
+            //click and jump to the book detail activity
             itemView.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -203,6 +206,8 @@ public class BookFragment extends Fragment {
             mBookAuthorNameTextView.setText("作者：" + book.author);
             mBookReadCountTextView.setText("阅读数:" + book.readTimes);
             mBookCollectionCountTextView.setText("收藏数:" + book.collectTimes);
+
+            //download book cover
             DownLoadBookInfoService service = new DownLoadBookInfoService();
             AsynTaskLoadImg task = new AsynTaskLoadImg(service,mBookCoverImageView,cache);
             task.execute(book.imgSource);
@@ -235,6 +240,5 @@ public class BookFragment extends Fragment {
         public int getItemCount() {
             return mBooksLib.size();
         }
-
     }
 }

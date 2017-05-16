@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.buaa.yushijie.bookreader.MainActivity;
 import com.buaa.yushijie.bookreader.R;
+import com.buaa.yushijie.bookreader.Services.EncodeAndDecode;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -38,7 +39,12 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mPasswordEditText;
     private Button mLoginButtton;
     private Button mRegisterButton;
-    private String TAG="LoginActivity";
+
+    private static final String URL_LOGIN = "http://120.25.89.166/BookReaderServer/Login";
+    private static final String TAG="LoginActivity";
+    private static final String USERNAME="username";
+
+
     private Thread t = null;
     private Handler handler  =new Handler(){
         @Override
@@ -93,22 +99,21 @@ public class LoginActivity extends AppCompatActivity {
     public void httpConnectionPost(){
         HttpURLConnection conn = null;
         try {
-            URL url = new URL("http://120.25.89.166/BookReaderServer/login");
+            URL url = new URL(URL_LOGIN);
             conn =(HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setDoInput(true);
             conn.setDoOutput(true);
             conn.connect();
             DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
-            String content = "username="+mUsernameEditText.getText().toString()+"&"
+            String content = "username="+ mUsernameEditText.getText().toString()+"&"
                     +"password="+mPasswordEditText.getText().toString();
-
             dos.writeBytes(content);
             dos.flush();
             dos.close();
             InputStream in = conn.getInputStream();
             InputStreamReader inr = new InputStreamReader(in);
-           BufferedReader bf = new BufferedReader(inr);
+            BufferedReader bf = new BufferedReader(inr);
             StringBuilder sb = new StringBuilder();
             String sa = null;
             while((sa  = bf.readLine())!=null){
@@ -117,6 +122,7 @@ public class LoginActivity extends AppCompatActivity {
             Log.e(TAG, "httpConnectionPost: "+sb.toString() );
             if(sb.toString().equals("1")){
                 Intent login = new Intent(LoginActivity.this,MainActivity.class);
+                login.putExtra(USERNAME,EncodeAndDecode.encodeString(mUsernameEditText.getText().toString()));
                 login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(login);
             }

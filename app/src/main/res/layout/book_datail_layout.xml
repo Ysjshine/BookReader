@@ -20,19 +20,19 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <Button
-            android:id="@+id/read_button"
+            android:id="@+id/book_detail_read_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="阅读"/>
         <Button
-            android:id="@+id/collection_button"
+            android:id="@+id/book_detail_collection_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="收藏"/>
         <Button
-            android:id="@+id/comment_button"
+            android:id="@+id/book_detail_comment_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

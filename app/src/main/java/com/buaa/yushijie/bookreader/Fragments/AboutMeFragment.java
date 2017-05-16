@@ -1,5 +1,6 @@
 package com.buaa.yushijie.bookreader.Fragments;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,6 +9,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.TaskStackBuilder;
 import android.system.ErrnoException;
+import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +20,8 @@ import android.widget.TextView;
 
 import com.buaa.yushijie.bookreader.Activities.LoginActivity;
 import com.buaa.yushijie.bookreader.R;
+import com.buaa.yushijie.bookreader.Services.CurrentUser;
+import com.buaa.yushijie.bookreader.Services.DownLoadBookInfoService;
 import com.buaa.yushijie.bookreader.Services.SQLUpload;
 
 import java.util.concurrent.TimeoutException;
@@ -28,9 +33,12 @@ import bean.UserBean;
  */
 
 public class AboutMeFragment extends Fragment {
-    private UserBean user = new UserBean();
+    private UserBean user ;
+//    private String username;
+
+    private static final String TAG = "DIALOG_CHANGE_PASSWORD";
     private TextView usernameTextView;
-    private EditText nicknameEditext;
+    private EditText nicknameEditText;
     private Button mModifyNickNameButton;
     private Button mModifyPasswordButton;
     private Button mLoginOutButton;
@@ -39,22 +47,26 @@ public class AboutMeFragment extends Fragment {
         @Override
         public void handleMessage(Message msg) {
             mModifyNickNameButton.setText("EDIT");
-            nicknameEditext.setFocusable(false);
+            nicknameEditText.setInputType(InputType.TYPE_NULL);
         }
     };
 
-
-    public UserBean getUser() {
-        return user;
-    }
-
-    public void setUser(UserBean user) {
-        this.user = user;
-    }
+//    public void setUsername(String username) {
+//        this.username = username;
+//    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//        //get user info thread
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                DownLoadBookInfoService service = new DownLoadBookInfoService();
+//                user = service.getUserInfo(username);
+//            }
+//        }).start();
     }
 
     @Nullable
@@ -62,27 +74,27 @@ public class AboutMeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.about_me_fragment,container,false);
         usernameTextView = (TextView)v.findViewById(R.id.about_me_fragment_username_text);
-        nicknameEditext = (EditText)v.findViewById(R.id.about_me_fragment_nickname_text);
+        nicknameEditText = (EditText)v.findViewById(R.id.about_me_fragment_nickname_text);
         mModifyNickNameButton = (Button) v.findViewById(R.id.about_me_fragment_edit_nickname_button);
         mModifyPasswordButton = (Button)v.findViewById(R.id.about_me_change_password_button);
         mLoginOutButton = (Button)v.findViewById(R.id.about_me_login_out_button);
-        nicknameEditext.setFocusable(false);
 
-        if(user == null)
-            return v;
-        user.UserID = 1;
-        user.account = "hhhhh";
-        user.nickname = "hhh";
+
+        nicknameEditText.setInputType(InputType.TYPE_NULL);
+        user = ((CurrentUser)getActivity().getApplication()).getUser();
+
         usernameTextView.setText(user.account);
-        nicknameEditext.setText(user.nickname);
+        nicknameEditText.setText(user.nickname);
+
+        //change nickname event
         mModifyNickNameButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                if(!nicknameEditext.isFocusable()){
-                    nicknameEditext.setFocusable(true);
+                if(nicknameEditText.getInputType() == InputType.TYPE_NULL){
+                    nicknameEditText.setInputType(InputType.TYPE_CLASS_TEXT);
                     mModifyNickNameButton.setText("save");
                 }else{
-                    String ans = nicknameEditext.getText().toString();
+                    String ans = nicknameEditText.getText().toString();
                     if(!ans.equals("")){
                         //send new nickname string to server
                         new Thread(new Runnable() {
@@ -101,22 +113,27 @@ public class AboutMeFragment extends Fragment {
                             }
                         }).start();
                     }else{
-                        nicknameEditext.setText(user.nickname);
+                        nicknameEditText.setText(user.nickname);
                     }
                     mModifyNickNameButton.setText("EDIT");
-                    nicknameEditext.setFocusable(false);
+                    nicknameEditText.setInputType(InputType.TYPE_NULL);
                 }
             }
         });
 
+        //change password event
         mModifyPasswordButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 //modify password
                 //show dialog
+                AboutMeChangePasswordFragment dialog = new AboutMeChangePasswordFragment();
+                dialog.setUb(user);
+                dialog.show(getFragmentManager(),TAG);
             }
         });
 
+        //login out event
         mLoginOutButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {

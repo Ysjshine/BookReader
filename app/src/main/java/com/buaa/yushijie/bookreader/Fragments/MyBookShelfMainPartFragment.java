@@ -1,13 +1,12 @@
 package com.buaa.yushijie.bookreader.Fragments;
 
 import android.content.Intent;
-import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.view.menu.ExpandedMenuView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +16,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.buaa.yushijie.bookreader.Activities.BookDetailActivity;
-import com.buaa.yushijie.bookreader.JavaBean.Books;
 import com.buaa.yushijie.bookreader.R;
+import com.buaa.yushijie.bookreader.Services.AsynTaskLoadImg;
+import com.buaa.yushijie.bookreader.Services.DownLoadBookInfoService;
+import com.buaa.yushijie.bookreader.Services.DownLoadMyBookShelfService;
 
-import org.w3c.dom.Text;
-
-import java.io.InputStream;
-import java.security.acl.Group;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.concurrent.TimeoutException;
+
+import bean.BookBean;
+import bean.UserCategory;
 
 /**
  * Created by yushijie on 17-5-4.
@@ -32,56 +34,122 @@ import java.util.ArrayList;
 
 public class MyBookShelfMainPartFragment extends Fragment {
     private ExpandableListView mBookShelfExpandableListView;
-    private ArrayList<ArrayList<Books>> bookItemsList = new ArrayList<>();
-    public static ArrayList<String> categoryGroupName = new ArrayList<>();
+
+    private ArrayList<ArrayList<BookBean>> bookItemsLists = new ArrayList<>();
+    public  ArrayList<UserCategory> categoryGroupNames = new ArrayList<>();
+    private DownLoadMyBookShelfService service = new DownLoadMyBookShelfService();
+    private File cache;
+
+    private static final String TAG="MyBookShelfMainPart";
+
+    private String username;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what == 0){
+                categoryGroupNames = (ArrayList<UserCategory>) msg.obj;
+            }else if(msg.what ==1){
+                bookItemsLists.add((ArrayList<BookBean>)msg.obj);
+            }
+        }
+    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
-    public void getData(){
-        categoryGroupName.add("我喜欢的书");
-        categoryGroupName.add("文学风");
 
-       for(int i=0;i<2;i++){
-           ArrayList<Books> book = new ArrayList<>();
-           for(int j=0;j<3;j++){
-               Books bs = new Books();
-               bs.setCover("cover.png");
-               bs.setAuthor("Matin");
-               bs.setCollectionCount(50);
-               bs.setReadCount(100);
-               bs.setTitle("Head first to Java");
-               book.add(bs);
-           }
-           bookItemsList.add(book);
-       }
+        cache = new File(getActivity().getCacheDir(), "cache");
+        if (!cache.exists()) {
+            cache.mkdirs();
+            Log.e(TAG, "onCreate: "+cache );
+        }
+
+        //get category thread
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Message msg = new Message();
+                    msg.what = 0;
+                    msg.obj = service.getCategoryNameList(username);
+                    handler.sendMessage(msg);
+                }catch (Exception e){
+                    if(e instanceof TimeoutException){
+                        //timeout
+                    }
+                    e.printStackTrace();
+                }finally {
+                    if(service.getConn() != null) service.getConn().disconnect();
+                }
+            }
+        }).start();
+
     }
+
+    //get every category's books
+    private class DownLoadBookBeanOfEveryCategoryThread extends Thread{
+        UserCategory category;
+        public DownLoadBookBeanOfEveryCategoryThread(UserCategory uc){
+            category = uc;
+        }
+
+        @Override
+        public void run() {
+            try{
+                Message msg = new Message();
+                msg.what = 1;
+                msg.obj = service.getBookOfEveryCategory(category);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+    //get every category book
+    public void getData(){
+        for(int i =0;i<categoryGroupNames.size();i++){
+
+           DownLoadBookBeanOfEveryCategoryThread t =
+                   new DownLoadBookBeanOfEveryCategoryThread(categoryGroupNames.get(i));
+            t.start();
+        }
+
+    }
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.my_book_shelf_fragment,container,false);
         mBookShelfExpandableListView = (ExpandableListView)v.findViewById(R.id.my_book_shelf_list);
         mBookShelfExpandableListView.setGroupIndicator(null);
+
+        //click category event
         mBookShelfExpandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                if(bookItemsList.get(groupPosition).isEmpty())
+                if(bookItemsLists.get(groupPosition).isEmpty())
                     return true;
                 return false;
             }
         });
 
+        //click book event
         mBookShelfExpandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                startActivity(new Intent(getActivity(), BookDetailActivity.class));
+                Intent i = new Intent(getActivity(), BookDetailActivity.class);
+                i.putExtra("BOOKITEM",bookItemsLists.get(groupPosition).get(childPosition));
+                startActivity(i);
                 return false;
             }
         });
 
         getData();
-        mBookShelfExpandableListView.setAdapter(new ExpandableListViewAdapter());
+        mBookShelfExpandableListView.setAdapter(new ExpandableListViewAdapter(categoryGroupNames,bookItemsLists));
 
         return v;
     }
@@ -90,6 +158,14 @@ public class MyBookShelfMainPartFragment extends Fragment {
 
     //adapter
     private class ExpandableListViewAdapter extends BaseExpandableListAdapter{
+        private ArrayList<UserCategory> categoryGroupName;
+        private ArrayList<ArrayList<BookBean>> bookItemsList;
+
+        public ExpandableListViewAdapter(ArrayList<UserCategory> ucList,ArrayList<ArrayList<BookBean>> bookList){
+            categoryGroupName = ucList;
+            bookItemsList = bookList;
+
+        }
         @Override
         public int getGroupCount() {
             return categoryGroupName.size();
@@ -138,7 +214,7 @@ public class MyBookShelfMainPartFragment extends Fragment {
             }else{
                 categoryHolder = (CategoryHolder)convertView.getTag();
             }
-            categoryHolder.categoryName.setText(categoryGroupName.get(groupPosition));
+            categoryHolder.categoryName.setText(categoryGroupName.get(groupPosition).CategoryName);
             return convertView;
         }
 
@@ -156,23 +232,12 @@ public class MyBookShelfMainPartFragment extends Fragment {
             }else{
                 bookItemHolder = (BookItemHolder)convertView.getTag();
             }
-            bookItemHolder.bookAuthor.setText(bookItemsList.get(groupPosition).get(childPosition).getAuthor());
-            bookItemHolder.bookTitle.setText(bookItemsList.get(groupPosition).get(childPosition).getTitle());
+            bookItemHolder.bookAuthor.setText(bookItemsList.get(groupPosition).get(childPosition).author);
+            bookItemHolder.bookTitle.setText(bookItemsList.get(groupPosition).get(childPosition).title);
 
-            //获取图像资源
-            AssetManager assetManager = getActivity().getAssets();
-            InputStream in = null;
-            try{
-                in = assetManager.open(bookItemsList.get(groupPosition).get(childPosition).getCover());
-            }catch (Exception e){
-                try{
-                    in = assetManager.open("cover.png");
-                }catch (Exception ee){
-                    ee.printStackTrace();
-                }
-            }
-            Bitmap bp = BitmapFactory.decodeStream(in);
-            bookItemHolder.cover.setImageBitmap(bp);
+            DownLoadBookInfoService service1 = new DownLoadBookInfoService();
+            AsynTaskLoadImg task = new AsynTaskLoadImg(service1,bookItemHolder.cover,cache);
+            task.execute(bookItemsList.get(groupPosition).get(childPosition).imgSource);
             return convertView;
         }
 

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bean.BookBean;
+import bean.UserBean;
 
 /**
  * Created by yushijie on 17-5-5.
@@ -24,18 +25,26 @@ import bean.BookBean;
 
 public class DownLoadBookInfoService {
     private static final String TAG = "DownLoadBookInfoService";
-    private static final String GETBOOKURL = "http://120.25.89.166/BookReaderServer/QueryBook?bookName=";
+    private static final String URL_GET_BOOK = "http://120.25.89.166/BookReaderServer/QueryBook?bookName=";
+    private static final String URL_GET_USER_INFO="http://120.25.89.166/BookReaderServer/SendUserInfo?username=";
+    private static final String URL_GET_BOOK_COMMENT="";
+
+    HttpURLConnection conn = null;
+    URL url = null;
+
+    private void connectToServer(String path) throws Exception{
+        url = new URL(path);
+        conn = (HttpURLConnection)url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setConnectTimeout(5000);
+        conn.setDoOutput(true);
+        conn.connect();
+    }
+
     public List<BookBean> getBookInfo(String query){
         List<BookBean> res = new ArrayList<>();
-        HttpURLConnection conn = null;
         try{
-            URL url = new URL(GETBOOKURL+java.net.URLEncoder.encode(query,"UTF-8"));
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-            conn.setConnectTimeout(3000);
-            conn.setRequestMethod("POST");
-            conn.connect();
+            connectToServer(URL_GET_BOOK+java.net.URLEncoder.encode(query,"UTF-8"));
 
             InputStream in = conn.getInputStream();
             ObjectInputStream ois = new ObjectInputStream(in);
@@ -61,12 +70,7 @@ public class DownLoadBookInfoService {
             if(file.exists()){
                return Uri.fromFile(file);
             }else{
-                URL url = new URL(path);
-                HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-                conn.setConnectTimeout(5000);
-                conn.setDoInput(true);
-                conn.setRequestMethod("POST");
-                conn.connect();
+                connectToServer(path);
 
                 InputStream in = conn.getInputStream();
                 BufferedInputStream bin = new BufferedInputStream(in);
@@ -77,7 +81,6 @@ public class DownLoadBookInfoService {
                 bp.compress(Bitmap.CompressFormat.JPEG,100,bitBins);
                 bitBins.flush();
                 fos.flush();
-
 
                 in.close();
                 bin.close();
@@ -90,4 +93,31 @@ public class DownLoadBookInfoService {
         }
         return null;
     }
+
+    public UserBean getUserInfo(String username){
+        UserBean res = null;
+        try{
+            connectToServer(URL_GET_USER_INFO+java.net.URLEncoder.encode(username,"UTF-8"));
+            ObjectInputStream ois = new ObjectInputStream(conn.getInputStream());
+            UserBean ub;
+            while((ub=(UserBean) ois.readObject())!=null){
+                res = ub;
+            }
+            ois.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if(conn!=null)conn.disconnect();
+        }
+        return res;
+    }
+
+//    public ArrayList<String> getComment(BookBean ub){
+//        ArrayList<String>
+//        try{
+//            connectToServer(URL_GET_BOOK_COMMENT);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//    }
 }

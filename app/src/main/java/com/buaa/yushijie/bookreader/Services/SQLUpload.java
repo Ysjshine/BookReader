@@ -1,7 +1,13 @@
 package com.buaa.yushijie.bookreader.Services;
 
+import android.util.Log;
+
+import java.io.BufferedReader;
+import java.io.DataInput;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -15,8 +21,11 @@ import bean.UserBean;
 
 public class SQLUpload {
 
-    private static final String SEND_CATEGORY = "";
-    private static final String SEND_NEW_NICKNAME="";
+    private static final String URL_SEND_CATEGORY = "";
+    private static final String URL_SEND_NEW_NICKNAME="http://120.25.89.166/BookReaderServer/UserInfo";
+    private static final String URL_SEND_NEW_PASSWORD="http://120.25.89.166/BookReaderServer/UserInfo";
+    private static final String URL_SEND_COMMENT="";
+
     private static HttpURLConnection conn = null;
     private static URL url = null;
 
@@ -27,37 +36,59 @@ public class SQLUpload {
         conn.setConnectTimeout(5000);
         conn.setDoOutput(true);
         conn.connect();
+
     }
+
 
     //send user category;
     public static void sendCategoryString(String category) throws Exception{
-        connectToServer(SEND_CATEGORY);
+        connectToServer(URL_SEND_CATEGORY);
         DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
         String categorys = "category="+category;
         dos.writeBytes(categorys);
         dos.flush();
         dos.close();
+        conn.getResponseCode();
         if(conn!=null)conn.disconnect();
     }
 
     //send user new nickname;
     public static void senNewNickNameString(UserBean ub, String newNickname) throws Exception{
-        connectToServer(SEND_NEW_NICKNAME);
-        conn.setDoInput(true);
+
+        connectToServer(URL_SEND_NEW_NICKNAME);
+        String info = "uid="+ub.UserID.toString()+"&"
+                +"newNickname="+newNickname;
         DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
-        String info = "uid="+ub.UserID+"&"
-                +"nickname="+newNickname;
         dos.writeBytes(info);
         dos.flush();
         dos.close();
-//
-//        ObjectInputStream ois = new ObjectInputStream(conn.getInputStream());
-//        UserBean ubs = null;
-//        while((ubs = (UserBean)ois.readObject())!=null){
-//            ub = ubs;
-//        }
-//        ois.close();
-
+        conn.getResponseCode();
         if(conn!=null) conn.disconnect();
+
+    }
+
+    //send new password
+    public static void sendNewPassword(UserBean ub,String newPassword) throws Exception{
+        connectToServer(URL_SEND_NEW_PASSWORD);
+        DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
+        String info = "uid="+ub.UserID+"&"
+                +"newPassword="+newPassword;
+        dos.writeBytes(info);
+        dos.flush();
+        dos.close();
+        conn.getResponseCode();
+        if(conn!=null)conn.disconnect();
+    }
+
+    public static void sendComment(UserBean ub,String comment) throws Exception{
+        connectToServer(URL_SEND_COMMENT);
+        DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
+        String info = "username="+ub.account+"&"
+                +"comment="+comment;
+        dos.writeBytes(info);
+        dos.flush();
+        dos.close();
+        conn.getResponseCode();
+        if(conn!=null)conn.disconnect();
     }
 }

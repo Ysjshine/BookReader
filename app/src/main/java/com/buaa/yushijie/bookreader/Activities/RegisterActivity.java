@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.buaa.yushijie.bookreader.MainActivity;
 import com.buaa.yushijie.bookreader.R;
+import com.buaa.yushijie.bookreader.Services.EncodeAndDecode;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -36,8 +37,12 @@ public class RegisterActivity extends AppCompatActivity {
     private RadioButton mMale;
     private RadioButton mFemale;
     private Button mRegisterButton;
+
+
     private String gender;
     private static final String TAG="RegisterActivity";
+    private static final String URL_REGISTER="http://120.25.89.166/BookReaderServer/Register";
+
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -82,7 +87,7 @@ public class RegisterActivity extends AppCompatActivity {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            httpConnectionPostRegiterInfo();
+                            httpConnectionPostRegisterInfo();
                         }
                     }).start();
                 }
@@ -92,17 +97,17 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    public void httpConnectionPostRegiterInfo(){
+    public void httpConnectionPostRegisterInfo(){
         HttpURLConnection conn = null;
         try {
-            URL url = new URL("http://120.25.89.166/BookReaderServer/register");
+            URL url = new URL(URL_REGISTER);
             conn =(HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setDoInput(true);
             conn.setDoOutput(true);
             conn.connect();
             DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
-            String content = "username="+mUsername.getText().toString()+"&"
+            String content = "username="+ mUsername.getText().toString()+"&"
                     +"password="+mPassword.getText().toString()+"&"
                     +"gender="+gender;
 

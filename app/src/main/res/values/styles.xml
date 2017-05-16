@@ -12,4 +12,9 @@
         <item name="android:editTextColor">@color/colorCategoryText</item>
         <item name="android:textColorHint">@color/colorCategoryText</item>
     </style>
+
+    <style name="MainTitle">
+        <item name="android:textSize">27sp</item>
+        <item name="android:gravity">center</item>
+    </style>
 </resources>

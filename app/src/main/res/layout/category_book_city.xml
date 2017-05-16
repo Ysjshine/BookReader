@@ -1,53 +1,236 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    
-    <ScrollView
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.buaa.yushijie.bookreader.MainActivity">
+
+    <FrameLayout
+        android:id="@+id/content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <TextView
-                style="@style/CategoryUpStyle"
-                android:text="男频" />
-            <GridLayout
+            android:layout_height="match_parent">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15sp"
-                android:columnCount="2"
-                android:rowCount="2">
+                android:orientation="vertical"
+                android:weightSum="1">
 
                 <TextView
-                    style="@style/CategoryDownStyle"
-                    android:text="玄幻修仙"
-                    android:layout_column="0"
-                    android:layout_row="0"
-                    />
-                <TextView
-                    style="@style/CategoryDownStyle"
-                    android:text="武侠"
-                    android:layout_column="1"
-                    android:layout_row="0"
-                    android:layout_marginLeft="50sp"/>
+                    android:id="@+id/textView"
+                    style="@style/MainTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Button"
+                    tools:text="书城主页" />
 
-                <TextView
-                    style="@style/CategoryDownStyle"
-                    android:text="仙侠幻情"
-                    android:layout_column="0"
-                    android:layout_row="1"
-                    />
-                <TextView
-                    style="@style/CategoryDownStyle"
-                    android:text="军事竞技"
-                    android:layout_column="1"
-                    android:layout_row="1"
-                    android:layout_marginLeft="50sp"/>
-            </GridLayout>
-        </LinearLayout>
-    </ScrollView>
+                <ImageView
+                    android:id="@+id/imageView9"
+                    android:layout_width="match_parent"
+                    android:layout_height="80sp"
+                    android:layout_weight="0.07"
+                    app:srcCompat="@android:drawable/button_onoff_indicator_off" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <ImageView
+                        android:id="@+id/imageView1"
+                        android:layout_width="85dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.07"
+                        app:srcCompat="@mipmap/ic_launcher1" />
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.22"
+                        app:srcCompat="@mipmap/ic_launcher1" />
+
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.33"
+                        app:srcCompat="@mipmap/ic_launcher1" />
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.31"
+                        app:srcCompat="@mipmap/ic_launcher1" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <ImageView
+                        android:id="@+id/imageView5"
+                        android:layout_width="85dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.07"
+                        app:srcCompat="@mipmap/ic_launcher1" />
+
+                    <ImageView
+                        android:id="@+id/imageView6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.22"
+                        app:srcCompat="@mipmap/ic_launcher1" />
+
+                    <ImageView
+                        android:id="@+id/imageView7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.33"
+                        app:srcCompat="@mipmap/ic_launcher1" />
+
+                    <ImageView
+                        android:id="@+id/imageView8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.31"
+                        app:srcCompat="@mipmap/ic_launcher1" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80sp"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginRight="10sp"
+                    android:layout_marginTop="20sp"
+                    android:background="@drawable/border">
+
+                    <ImageView
+                        android:id="@+id/imageViewR1_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
+                        app:srcCompat="@android:drawable/btn_star_big_on" />
+
+                    <TextView
+                        android:id="@+id/textViewR1_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/imageViewR1_1"
+                        android:layout_marginLeft="47dp"
+                        android:layout_marginStart="47dp"
+                        android:layout_toEndOf="@+id/imageViewR1_1"
+                        android:layout_toRightOf="@+id/imageViewR1_1"
+                        android:text="Title" />
+
+                    <TextView
+                        android:id="@+id/textViewR1_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/textViewR1_2"
+                        android:layout_alignStart="@+id/textViewR1_2"
+                        android:layout_below="@+id/imageViewR1_1"
+                        android:text="Summary" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80sp"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginRight="10sp"
+                    android:layout_marginTop="20sp"
+                    android:background="@drawable/border">
+
+                    <ImageView
+                        android:id="@+id/imageViewR2_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
+                        app:srcCompat="@android:drawable/btn_star_big_on" />
+
+                    <TextView
+                        android:id="@+id/textViewR2_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/imageViewR2_1"
+                        android:layout_marginLeft="47dp"
+                        android:layout_marginStart="47dp"
+                        android:layout_toEndOf="@+id/imageViewR2_1"
+                        android:layout_toRightOf="@+id/imageViewR2_1"
+                        android:text="Title" />
+
+                    <TextView
+                        android:id="@+id/textViewR2_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/textViewR2_2"
+                        android:layout_alignStart="@+id/textViewR2_2"
+                        android:layout_below="@+id/imageViewR2_1"
+                        android:text="Summary" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80sp"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginRight="10sp"
+                    android:layout_marginTop="20sp"
+                    android:background="@drawable/border">
+
+                    <ImageView
+                        android:id="@+id/imageViewR3_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
+                        app:srcCompat="@android:drawable/btn_star_big_on" />
+
+                    <TextView
+                        android:id="@+id/textViewR3_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/imageViewR3_1"
+                        android:layout_marginLeft="47dp"
+                        android:layout_marginStart="47dp"
+                        android:layout_toEndOf="@+id/imageViewR3_1"
+                        android:layout_toRightOf="@+id/imageViewR3_1"
+                        android:text="Title" />
+
+                    <TextView
+                        android:id="@+id/textViewR3_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/textViewR3_2"
+                        android:layout_alignStart="@+id/textViewR3_2"
+                        android:layout_below="@+id/imageViewR3_1"
+                        android:text="Summary" />
+                </RelativeLayout>
+            </LinearLayout>
+        </ScrollView>
+
+    </FrameLayout>
 </LinearLayout>
