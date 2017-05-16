@@ -32,9 +32,10 @@ public class DownLoadMyBookShelfService {
         conn.setRequestMethod("POST");
         conn.connect();
     }
+
     public ArrayList<UserCategory> getCategoryNameList(String username) throws Exception{
         ArrayList<UserCategory> res = new ArrayList<>();
-        connectToServer(URL_GET_BOOK_SHELF_CATEGORY_INFO+java.net.URLEncoder.encode(username,"UTF-8"));
+        connectToServer(URL_GET_BOOK_SHELF_CATEGORY_INFO+EncodeAndDecode.encodeString(username));
         ObjectInputStream ois = new ObjectInputStream(conn.getInputStream());
         UserCategory uc;
 
