@@ -57,7 +57,7 @@ public class SQLUpload {
 
         connectToServer(URL_SEND_NEW_NICKNAME);
         String info = "uid="+ub.UserID.toString()+"&"
-                +"newNickname="+newNickname;
+                +"newNickname="+EncodeAndDecode.encodeString(newNickname);
         DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
         dos.writeBytes(info);
         dos.flush();

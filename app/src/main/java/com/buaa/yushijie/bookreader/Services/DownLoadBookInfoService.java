@@ -44,7 +44,7 @@ public class DownLoadBookInfoService {
     public List<BookBean> getBookInfo(String query){
         List<BookBean> res = new ArrayList<>();
         try{
-            connectToServer(URL_GET_BOOK+java.net.URLEncoder.encode(query,"UTF-8"));
+            connectToServer(URL_GET_BOOK+EncodeAndDecode.encodeString(query));
 
             InputStream in = conn.getInputStream();
             ObjectInputStream ois = new ObjectInputStream(in);

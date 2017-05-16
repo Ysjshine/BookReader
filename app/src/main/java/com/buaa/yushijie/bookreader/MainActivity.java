@@ -21,6 +21,7 @@ import com.buaa.yushijie.bookreader.Fragments.MyBookShelfNavigationFragment;
 import com.buaa.yushijie.bookreader.Fragments.NavigationFragment;
 import com.buaa.yushijie.bookreader.Services.CurrentUser;
 import com.buaa.yushijie.bookreader.Services.DownLoadBookInfoService;
+import com.buaa.yushijie.bookreader.Services.EncodeAndDecode;
 
 import bean.UserBean;
 

@@ -106,7 +106,7 @@ public class LoginActivity extends AppCompatActivity {
             conn.setDoOutput(true);
             conn.connect();
             DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
-            String content = "username="+ mUsernameEditText.getText().toString()+"&"
+            String content = "username="+EncodeAndDecode.encodeString( mUsernameEditText.getText().toString())+"&"
                     +"password="+mPasswordEditText.getText().toString();
             dos.writeBytes(content);
             dos.flush();
@@ -122,7 +122,7 @@ public class LoginActivity extends AppCompatActivity {
             Log.e(TAG, "httpConnectionPost: "+sb.toString() );
             if(sb.toString().equals("1")){
                 Intent login = new Intent(LoginActivity.this,MainActivity.class);
-                login.putExtra(USERNAME,EncodeAndDecode.encodeString(mUsernameEditText.getText().toString()));
+                login.putExtra(USERNAME,mUsernameEditText.getText().toString());
                 login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(login);
             }

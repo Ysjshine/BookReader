@@ -107,7 +107,7 @@ public class RegisterActivity extends AppCompatActivity {
             conn.setDoOutput(true);
             conn.connect();
             DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
-            String content = "username="+ mUsername.getText().toString()+"&"
+            String content = "username="+ EncodeAndDecode.encodeString(mUsername.getText().toString())+"&"
                     +"password="+mPassword.getText().toString()+"&"
                     +"gender="+gender;
 
