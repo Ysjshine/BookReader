@@ -11,9 +11,15 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.buaa.yushijie.bookreader.R;
+import com.buaa.yushijie.bookreader.Services.CurrentUser;
+import com.buaa.yushijie.bookreader.Services.DownLoadMyBookShelfService;
 import com.buaa.yushijie.bookreader.Services.SQLUpload;
 
-import java.util.zip.Inflater;
+import java.util.ArrayList;
+import java.util.concurrent.TimeoutException;
+
+import bean.UserBean;
+import bean.UserCategory;
 
 /**
  * Created by yushijie on 17-5-12.
@@ -21,11 +27,7 @@ import java.util.zip.Inflater;
 
 public class CategorySetDialogFragment extends DialogFragment {
     private EditText categoryEditText;
-    private String categoryRes = null;
 
-    public String getCategoryRes() {
-        return categoryRes;
-    }
 
     @NonNull
     @Override
@@ -44,13 +46,27 @@ public class CategorySetDialogFragment extends DialogFragment {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             String category = categoryEditText.getText().toString();
+            CurrentUser cu = (CurrentUser)getActivity().getApplication();
+            UserBean ub = cu.getUser();
+
             if (!category.equals("")) {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            SQLUpload.sendCategoryString(category);
+                            SQLUpload.sendCategoryString(ub,category);
                         } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            DownLoadMyBookShelfService services = new DownLoadMyBookShelfService();
+                            ArrayList<UserCategory> auc = services.getCategoryNameList(ub.account);
+                            cu.setUserCategories(auc);
+
+                        }catch (Exception e){
+                            if(e instanceof TimeoutException){
+                                //timeout
+                            }
                             e.printStackTrace();
                         }
                     }

@@ -21,7 +21,7 @@ import bean.UserBean;
 
 public class SQLUpload {
 
-    private static final String URL_SEND_CATEGORY = "";
+    private static final String URL_SEND_CATEGORY = "http://120.25.89.166/BookReaderServer/AddCategory";
     private static final String URL_SEND_NEW_NICKNAME="http://120.25.89.166/BookReaderServer/UserInfo";
     private static final String URL_SEND_NEW_PASSWORD="http://120.25.89.166/BookReaderServer/UserInfo";
     private static final String URL_SEND_COMMENT="";
@@ -41,10 +41,11 @@ public class SQLUpload {
 
 
     //send user category;
-    public static void sendCategoryString(String category) throws Exception{
+    public static void sendCategoryString(UserBean ub,String category) throws Exception{
         connectToServer(URL_SEND_CATEGORY);
         DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
-        String categorys = "category="+category;
+        String categorys = "uid="+ub.UserID+"&"
+                +"categoryName="+EncodeAndDecode.encodeString(category);
         dos.writeBytes(categorys);
         dos.flush();
         dos.close();

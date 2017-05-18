@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.buaa.yushijie.bookreader.Activities.BookDetailActivity;
 import com.buaa.yushijie.bookreader.R;
 import com.buaa.yushijie.bookreader.Services.AsynTaskLoadImg;
+import com.buaa.yushijie.bookreader.Services.CurrentUser;
 import com.buaa.yushijie.bookreader.Services.DownLoadBookInfoService;
 import com.buaa.yushijie.bookreader.Services.DownLoadMyBookShelfService;
 
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
 import bean.BookBean;
+import bean.UserBean;
 import bean.UserCategory;
 
 /**
@@ -36,25 +38,22 @@ public class MyBookShelfMainPartFragment extends Fragment {
     private ExpandableListView mBookShelfExpandableListView;
 
     private ArrayList<ArrayList<BookBean>> bookItemsLists = new ArrayList<>();
-    public  ArrayList<UserCategory> categoryGroupNames = new ArrayList<>();
+    private  ArrayList<UserCategory> categoryGroupNames = new ArrayList<>();
     private DownLoadMyBookShelfService service = new DownLoadMyBookShelfService();
     private File cache;
 
     private static final String TAG="MyBookShelfMainPart";
 
-    private String username;
-    public void setUsername(String username) {
-        this.username = username;
+
+    public void setCategoryGroupNames(ArrayList<UserCategory> categoryGroupNames) {
+        this.categoryGroupNames = categoryGroupNames;
     }
 
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            if(msg.what == 0){
-                categoryGroupNames = (ArrayList<UserCategory>) msg.obj;
-            }else if(msg.what ==1){
-                bookItemsLists.add((ArrayList<BookBean>)msg.obj);
-            }
+            bookItemsLists.add((ArrayList<BookBean>)msg.obj);
+            mBookShelfExpandableListView.setAdapter(new ExpandableListViewAdapter(categoryGroupNames,bookItemsLists));
         }
     };
 
@@ -67,42 +66,26 @@ public class MyBookShelfMainPartFragment extends Fragment {
             cache.mkdirs();
             Log.e(TAG, "onCreate: "+cache );
         }
-
-        //get category thread
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Message msg = new Message();
-                    msg.what = 0;
-                    msg.obj = service.getCategoryNameList(username);
-                    handler.sendMessage(msg);
-                }catch (Exception e){
-                    if(e instanceof TimeoutException){
-                        //timeout
-                    }
-                    e.printStackTrace();
-                }finally {
-                    if(service.getConn() != null) service.getConn().disconnect();
-                }
-            }
-        }).start();
-
     }
 
     //get every category's books
     private class DownLoadBookBeanOfEveryCategoryThread extends Thread{
-        UserCategory category;
-        public DownLoadBookBeanOfEveryCategoryThread(UserCategory uc){
+        ArrayList<UserCategory> category;
+        public DownLoadBookBeanOfEveryCategoryThread(ArrayList<UserCategory> uc){
             category = uc;
         }
 
         @Override
         public void run() {
             try{
-                Message msg = new Message();
-                msg.what = 1;
-                msg.obj = service.getBookOfEveryCategory(category);
+                UserBean ub = ((CurrentUser) getActivity().getApplication()).getUser();
+                for(int i=0;i<category.size();i++) {
+                    Message msg = new Message();
+                    msg.what = 1;
+                    msg.obj = service.getBookOfEveryCategory(category.get(i), ub);
+
+                    handler.sendMessage(msg);
+                }
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -110,13 +93,10 @@ public class MyBookShelfMainPartFragment extends Fragment {
     }
     //get every category book
     public void getData(){
-        for(int i =0;i<categoryGroupNames.size();i++){
-
+        categoryGroupNames = ((CurrentUser)getActivity().getApplication()).getUserCategories();
            DownLoadBookBeanOfEveryCategoryThread t =
-                   new DownLoadBookBeanOfEveryCategoryThread(categoryGroupNames.get(i));
+                   new DownLoadBookBeanOfEveryCategoryThread(categoryGroupNames);
             t.start();
-        }
-
     }
 
 
@@ -149,8 +129,6 @@ public class MyBookShelfMainPartFragment extends Fragment {
         });
 
         getData();
-        mBookShelfExpandableListView.setAdapter(new ExpandableListViewAdapter(categoryGroupNames,bookItemsLists));
-
         return v;
     }
 
@@ -234,6 +212,7 @@ public class MyBookShelfMainPartFragment extends Fragment {
             }
             bookItemHolder.bookAuthor.setText(bookItemsList.get(groupPosition).get(childPosition).author);
             bookItemHolder.bookTitle.setText(bookItemsList.get(groupPosition).get(childPosition).title);
+           // Log.e(TAG, "getChildView: "+bookItemsList.get(groupPosition).get(childPosition).author);
 
             DownLoadBookInfoService service1 = new DownLoadBookInfoService();
             AsynTaskLoadImg task = new AsynTaskLoadImg(service1,bookItemHolder.cover,cache);

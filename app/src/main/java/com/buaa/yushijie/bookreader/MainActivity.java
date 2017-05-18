@@ -2,6 +2,7 @@ package com.buaa.yushijie.bookreader;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -21,9 +22,14 @@ import com.buaa.yushijie.bookreader.Fragments.MyBookShelfNavigationFragment;
 import com.buaa.yushijie.bookreader.Fragments.NavigationFragment;
 import com.buaa.yushijie.bookreader.Services.CurrentUser;
 import com.buaa.yushijie.bookreader.Services.DownLoadBookInfoService;
+import com.buaa.yushijie.bookreader.Services.DownLoadMyBookShelfService;
 import com.buaa.yushijie.bookreader.Services.EncodeAndDecode;
 
+import java.util.ArrayList;
+import java.util.concurrent.TimeoutException;
+
 import bean.UserBean;
+import bean.UserCategory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -75,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //mTextMessage = (TextView) findViewById(R.id.message);
 
-        //get user info thread
+        //get user info and user category thread
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -83,11 +89,20 @@ public class MainActivity extends AppCompatActivity {
                 user = service.getUserInfo(getIntent().getStringExtra(USERNAME));
                 CurrentUser cu = (CurrentUser)getApplication();
                 cu.setUser(user);
+                //get category
+                try {
+                    DownLoadMyBookShelfService services = new DownLoadMyBookShelfService();
+                    UserBean ub = cu.getUser();
+                    cu.setUserCategories(services.getCategoryNameList(ub.account));
+                }catch (Exception e){
+                    if(e instanceof TimeoutException){
+                        //timeout
+                    }
+                    e.printStackTrace();
+                }
             }
         }).start();
 
-        myBookShelfMainPartFragment.setUsername(getIntent().getStringExtra(USERNAME));
-        //aboutMeFragment.setUsername(getIntent().getStringExtra(USERNAME));
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
