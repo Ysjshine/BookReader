@@ -26,6 +26,7 @@ public class CommentRecyclerFragmemt extends Fragment{
 
     private RecyclerView mRecyclerView;
     private CommentAdapter mAdpater;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -33,6 +33,7 @@ public class SQLUpload {
     private static final String URL_SEND_COMMENT="";
     private static final String URL_SEND_DELETING_BOOK_INFO="";
     private static final String URL_SEND_DELETING_CATEGORY_INFO="";
+    private static final String URL_SEND_COLLECTION_INFO="";
 
     private static HttpURLConnection conn = null;
     private static URL url = null;
@@ -90,6 +91,7 @@ public class SQLUpload {
         if(conn!=null)conn.disconnect();
     }
 
+    //send comment
     public static void sendComment(UserBean ub,String comment) throws Exception{
         connectToServer(URL_SEND_COMMENT);
         DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
@@ -102,8 +104,26 @@ public class SQLUpload {
         if(conn!=null)conn.disconnect();
     }
 
+    private static void getReturnInfo(Handler handler) throws Exception{
+        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        StringBuilder sb = new StringBuilder();
+        String stp;
+        while((stp = br.readLine())!=null){
+            sb.append(stp);
+        }
+        if(sb.equals("1")){
+            Message msg = new Message();
+            msg.what = 1;
+            handler.sendMessage(msg);
+        }else{
+            Message msg = new Message();
+            msg.what = 0;
+            handler.sendMessage(msg);
+        }
+    }
     //send deleting book info
-    public static void sendDeleteCollectionBookInfo(UserBean ub, BookBean bookBean, Handler handler) throws Exception{
+    public static void sendDeleteCollectionBookInfo(UserBean ub, BookBean bookBean,
+                                                    Handler handler) throws Exception{
         connectToServer(URL_SEND_DELETING_BOOK_INFO);
         DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
         String info = "uid="+ub.UserID+"&"
@@ -112,26 +132,13 @@ public class SQLUpload {
         dos.flush();
         dos.close();
         //conn.getResponseCode();
-        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        StringBuilder sb = new StringBuilder();
-        String stp;
-        while((stp = br.readLine())!=null){
-            sb.append(stp);
-        }
-        if(sb.equals("1")){
-            Message msg = new Message();
-            msg.what = 1;
-            handler.sendMessage(msg);
-        }else{
-            Message msg = new Message();
-            msg.what = 0;
-            handler.sendMessage(msg);
-        }
+        getReturnInfo(handler);
         if(conn!=null) conn.disconnect();
     }
 
     //send deleting category info
-    public static void sendDeleteCollectionCategoryInfo(UserBean ub, UserCategory userCategory,Handler handler) throws Exception{
+    public static void sendDeleteCollectionCategoryInfo(UserBean ub, UserCategory userCategory,
+                                                        Handler handler) throws Exception{
         connectToServer(URL_SEND_DELETING_CATEGORY_INFO);
         DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
         String info = "uid="+ub.UserID+"&"
@@ -139,21 +146,22 @@ public class SQLUpload {
         dos.writeBytes(info);
         dos.flush();
         dos.close();
-        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        StringBuilder sb = new StringBuilder();
-        String stp;
-        while((stp = br.readLine())!=null){
-            sb.append(stp);
-        }
-        if(sb.equals("1")){
-            Message msg = new Message();
-            msg.what = 1;
-            handler.sendMessage(msg);
-        }else{
-            Message msg = new Message();
-            msg.what = 0;
-            handler.sendMessage(msg);
-        }
+        getReturnInfo(handler);
         if(conn!=null) conn.disconnect();
+    }
+
+    //send collection info
+    public static void sendCollectionInfo(UserBean userBean, UserCategory userCategory,
+                                          BookBean bookBean,Handler handler) throws Exception{
+        connectToServer(URL_SEND_COLLECTION_INFO);
+        DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
+        String info = "uid="+userBean.UserID+"&"
+                +"cid="+userCategory.CategoryID+"&"
+                +"bid="+bookBean.BookID;
+        dos.writeBytes(info);
+        dos.flush();
+        dos.close();
+        getReturnInfo(handler);
+        if(conn!=null)conn.disconnect();
     }
 }

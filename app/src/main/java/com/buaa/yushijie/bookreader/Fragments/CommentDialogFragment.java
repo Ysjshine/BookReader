@@ -42,12 +42,12 @@ public class CommentDialogFragment extends DialogFragment {
                 .setView(v)
                 .setTitle("写评论")
                 .setNegativeButton("Cancel",null)
-                .setPositiveButton("OK",null)
+                .setPositiveButton("OK",new ConfirmButtonListener())
                 .create();
         return dialog;
     }
 
-    private class confirmContentButtonListener implements DialogInterface.OnClickListener{
+    private class ConfirmButtonListener implements DialogInterface.OnClickListener{
         @Override
         public void onClick(DialogInterface dialog, int which) {
             //send comment to server

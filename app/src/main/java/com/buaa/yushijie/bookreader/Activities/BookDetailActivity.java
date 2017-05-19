@@ -8,9 +8,9 @@ import android.widget.Button;
 
 import com.buaa.yushijie.bookreader.Fragments.BookDatailFragment;
 import com.buaa.yushijie.bookreader.Fragments.BookDatailNavigationFragment;
+import com.buaa.yushijie.bookreader.Fragments.BookDetailCollectionRecycleDialogFragment;
 import com.buaa.yushijie.bookreader.Fragments.CommentDialogFragment;
 import com.buaa.yushijie.bookreader.Fragments.CommentRecyclerFragmemt;
-import com.buaa.yushijie.bookreader.Fragments.NavigationFragment;
 import com.buaa.yushijie.bookreader.R;
 
 import bean.BookBean;
@@ -23,7 +23,7 @@ public class BookDetailActivity extends FragmentActivity {
     private BookDatailFragment bookDatailFragment = new BookDatailFragment();
     private final static String BOOKKEY="BOOKITEM";
     private static final String TAG = "comment";
-
+    private BookBean currentBook;
     private Button readBookButton;
     private Button collectBookButton;
     private Button commentButton;
@@ -35,8 +35,8 @@ public class BookDetailActivity extends FragmentActivity {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.navigation_book_datail_container,new BookDatailNavigationFragment())
                 .commit();
-        BookBean book = (BookBean) getIntent().getSerializableExtra(BOOKKEY);
-        bookDatailFragment.setBook(book);
+        currentBook = (BookBean) getIntent().getSerializableExtra(BOOKKEY);
+        bookDatailFragment.setBook(currentBook);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.book_detail_fragment_container,bookDatailFragment)
                 .commit();
@@ -54,6 +54,16 @@ public class BookDetailActivity extends FragmentActivity {
             public void onClick(View v) {
                 CommentDialogFragment dialog = new CommentDialogFragment();
                 dialog.show(getSupportFragmentManager(),TAG);
+            }
+        });
+
+        collectBookButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BookDetailCollectionRecycleDialogFragment dialogFragment = new BookDetailCollectionRecycleDialogFragment();
+                dialogFragment.setBookBean(currentBook);
+                dialogFragment.show(getSupportFragmentManager(),"Collect");
+
             }
         });
     }
