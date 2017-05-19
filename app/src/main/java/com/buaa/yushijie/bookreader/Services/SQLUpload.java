@@ -1,7 +1,10 @@
 package com.buaa.yushijie.bookreader.Services;
 
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataInput;
 import java.io.DataInputStream;
@@ -10,10 +13,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.OutputStream;
+import java.io.StreamCorruptedException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import bean.BookBean;
 import bean.UserBean;
+import bean.UserCategory;
 
 /**
  * Created by yushijie on 17-5-11.
@@ -25,6 +31,8 @@ public class SQLUpload {
     private static final String URL_SEND_NEW_NICKNAME="http://120.25.89.166/BookReaderServer/UserInfo";
     private static final String URL_SEND_NEW_PASSWORD="http://120.25.89.166/BookReaderServer/UserInfo";
     private static final String URL_SEND_COMMENT="";
+    private static final String URL_SEND_DELETING_BOOK_INFO="";
+    private static final String URL_SEND_DELETING_CATEGORY_INFO="";
 
     private static HttpURLConnection conn = null;
     private static URL url = null;
@@ -35,6 +43,7 @@ public class SQLUpload {
         conn.setRequestMethod("POST");
         conn.setConnectTimeout(5000);
         conn.setDoOutput(true);
+        conn.setDoInput(true);
         conn.connect();
 
     }
@@ -91,5 +100,60 @@ public class SQLUpload {
         dos.close();
         conn.getResponseCode();
         if(conn!=null)conn.disconnect();
+    }
+
+    //send deleting book info
+    public static void sendDeleteCollectionBookInfo(UserBean ub, BookBean bookBean, Handler handler) throws Exception{
+        connectToServer(URL_SEND_DELETING_BOOK_INFO);
+        DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
+        String info = "uid="+ub.UserID+"&"
+                +"bid="+bookBean.BookID;
+        dos.writeBytes(info);
+        dos.flush();
+        dos.close();
+        //conn.getResponseCode();
+        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        StringBuilder sb = new StringBuilder();
+        String stp;
+        while((stp = br.readLine())!=null){
+            sb.append(stp);
+        }
+        if(sb.equals("1")){
+            Message msg = new Message();
+            msg.what = 1;
+            handler.sendMessage(msg);
+        }else{
+            Message msg = new Message();
+            msg.what = 0;
+            handler.sendMessage(msg);
+        }
+        if(conn!=null) conn.disconnect();
+    }
+
+    //send deleting category info
+    public static void sendDeleteCollectionCategoryInfo(UserBean ub, UserCategory userCategory,Handler handler) throws Exception{
+        connectToServer(URL_SEND_DELETING_CATEGORY_INFO);
+        DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
+        String info = "uid="+ub.UserID+"&"
+                +"cid="+userCategory.CategoryID;
+        dos.writeBytes(info);
+        dos.flush();
+        dos.close();
+        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        StringBuilder sb = new StringBuilder();
+        String stp;
+        while((stp = br.readLine())!=null){
+            sb.append(stp);
+        }
+        if(sb.equals("1")){
+            Message msg = new Message();
+            msg.what = 1;
+            handler.sendMessage(msg);
+        }else{
+            Message msg = new Message();
+            msg.what = 0;
+            handler.sendMessage(msg);
+        }
+        if(conn!=null) conn.disconnect();
     }
 }

@@ -35,7 +35,7 @@ public class DownLoadMyBookShelfService {
         conn.setRequestMethod("POST");
         conn.connect();
     }
-
+    //get category
     public ArrayList<UserCategory> getCategoryNameList(String username) throws Exception{
         ArrayList<UserCategory> res = new ArrayList<>();
         connectToServer(URL_GET_BOOK_SHELF_CATEGORY_INFO);
@@ -55,7 +55,7 @@ public class DownLoadMyBookShelfService {
         if(conn!=null)conn.disconnect();
         return res;
     }
-
+    //get bookss
     public ArrayList<BookBean> getBookOfEveryCategory(UserCategory uc,UserBean ub) throws Exception{
         ArrayList<BookBean> res = new ArrayList<>();
         connectToServer(URL_GET_BOOK_SHELF_BOOKBEAN_INFO);

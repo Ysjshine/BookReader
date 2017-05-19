@@ -2,6 +2,9 @@ package com.buaa.yushijie.bookreader.Services;
 
 import android.app.Application;
 
+import com.buaa.yushijie.bookreader.Fragments.MyBookShelfDeleteACategoryDialogFragment;
+import com.buaa.yushijie.bookreader.Fragments.MyBookShelfMainPartFragment;
+
 import java.util.ArrayList;
 
 import bean.UserBean;
@@ -14,6 +17,8 @@ import bean.UserCategory;
 public class CurrentUser extends Application {
     private UserBean user;
     private ArrayList<UserCategory> userCategories;
+    private MyBookShelfMainPartFragment.ExpandableListViewAdapter mAdapter;
+
 
     public UserBean getUser() {
         return user;
@@ -29,6 +34,14 @@ public class CurrentUser extends Application {
 
     public void setUserCategories(ArrayList<UserCategory> userCategories) {
         this.userCategories = userCategories;
+    }
+
+    public MyBookShelfMainPartFragment.ExpandableListViewAdapter getAdapter() {
+        return mAdapter;
+    }
+
+    public void setAdapter(MyBookShelfMainPartFragment.ExpandableListViewAdapter mAdapter) {
+        this.mAdapter = mAdapter;
     }
 
     public CurrentUser(){

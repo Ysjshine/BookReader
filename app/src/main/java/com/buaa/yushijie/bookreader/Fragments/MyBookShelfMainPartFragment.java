@@ -1,5 +1,6 @@
 package com.buaa.yushijie.bookreader.Fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
@@ -23,6 +26,7 @@ import com.buaa.yushijie.bookreader.Services.DownLoadBookInfoService;
 import com.buaa.yushijie.bookreader.Services.DownLoadMyBookShelfService;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
@@ -34,26 +38,29 @@ import bean.UserCategory;
  * Created by yushijie on 17-5-4.
  */
 
-public class MyBookShelfMainPartFragment extends Fragment {
+public class MyBookShelfMainPartFragment extends Fragment implements Serializable{
     private ExpandableListView mBookShelfExpandableListView;
 
     private ArrayList<ArrayList<BookBean>> bookItemsLists = new ArrayList<>();
     private  ArrayList<UserCategory> categoryGroupNames = new ArrayList<>();
     private DownLoadMyBookShelfService service = new DownLoadMyBookShelfService();
     private File cache;
-
+    private ExpandableListViewAdapter mAdapter = null;
     private static final String TAG="MyBookShelfMainPart";
+    private Activity currentActivity;
 
-
-    public void setCategoryGroupNames(ArrayList<UserCategory> categoryGroupNames) {
-        this.categoryGroupNames = categoryGroupNames;
+    public ExpandableListViewAdapter getAdapter(){
+        return mAdapter;
     }
 
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             bookItemsLists.add((ArrayList<BookBean>)msg.obj);
-            mBookShelfExpandableListView.setAdapter(new ExpandableListViewAdapter(categoryGroupNames,bookItemsLists));
+            mAdapter = new ExpandableListViewAdapter(categoryGroupNames,bookItemsLists);
+            mBookShelfExpandableListView.setAdapter(mAdapter);
+            CurrentUser cu = (CurrentUser)currentActivity.getApplication();
+            cu.setAdapter(mAdapter);
         }
     };
 
@@ -78,12 +85,11 @@ public class MyBookShelfMainPartFragment extends Fragment {
         @Override
         public void run() {
             try{
-                UserBean ub = ((CurrentUser) getActivity().getApplication()).getUser();
+                UserBean ub = ((CurrentUser) currentActivity.getApplication()).getUser();
                 for(int i=0;i<category.size();i++) {
                     Message msg = new Message();
                     msg.what = 1;
                     msg.obj = service.getBookOfEveryCategory(category.get(i), ub);
-
                     handler.sendMessage(msg);
                 }
             }catch (Exception e){
@@ -93,7 +99,7 @@ public class MyBookShelfMainPartFragment extends Fragment {
     }
     //get every category book
     public void getData(){
-        categoryGroupNames = ((CurrentUser)getActivity().getApplication()).getUserCategories();
+        categoryGroupNames = ((CurrentUser)currentActivity.getApplication()).getUserCategories();
            DownLoadBookBeanOfEveryCategoryThread t =
                    new DownLoadBookBeanOfEveryCategoryThread(categoryGroupNames);
             t.start();
@@ -107,6 +113,7 @@ public class MyBookShelfMainPartFragment extends Fragment {
         mBookShelfExpandableListView = (ExpandableListView)v.findViewById(R.id.my_book_shelf_list);
         mBookShelfExpandableListView.setGroupIndicator(null);
 
+        currentActivity = getActivity();
         //click category event
         mBookShelfExpandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
@@ -121,9 +128,38 @@ public class MyBookShelfMainPartFragment extends Fragment {
         mBookShelfExpandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                Intent i = new Intent(getActivity(), BookDetailActivity.class);
-                i.putExtra("BOOKITEM",bookItemsLists.get(groupPosition).get(childPosition));
-                startActivity(i);
+                Intent intent = new Intent(currentActivity, BookDetailActivity.class);
+                intent.putExtra("BOOKITEM",bookItemsLists.get(groupPosition).get(childPosition));
+                startActivity(intent);
+                return false;
+            }
+        });
+
+        //long touch to delete
+        mBookShelfExpandableListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                if(ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_CHILD){
+                    //if it's a child
+                    long packPos = ((ExpandableListView) parent).getExpandableListPosition(position);
+                    int groupPosition=ExpandableListView.getPackedPositionGroup(packPos);
+                    int childPosition= ExpandableListView.getPackedPositionChild(packPos);
+                    BookBean bookBean = bookItemsLists.get(groupPosition).get(childPosition);
+                    MyBookShelfDeleteABookDialogFragment dialog = new MyBookShelfDeleteABookDialogFragment();
+                    dialog.setBookBean(bookBean);
+                    dialog.show(getFragmentManager(),"Delete a book");
+                    return true;
+                }else if(ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_GROUP){
+                    //if it's a parent
+                    long packPos = ((ExpandableListView) parent).getExpandableListPosition(position);
+                    int groupPosition=ExpandableListView.getPackedPositionGroup(packPos);
+                    UserCategory userCategory = categoryGroupNames.get(groupPosition);
+                    MyBookShelfDeleteACategoryDialogFragment dialog = new MyBookShelfDeleteACategoryDialogFragment();
+                    dialog.setUserCategory(userCategory);
+                    dialog.show(getFragmentManager(),"Delete a category");
+                    return true;
+                }
                 return false;
             }
         });
@@ -135,7 +171,7 @@ public class MyBookShelfMainPartFragment extends Fragment {
 
 
     //adapter
-    private class ExpandableListViewAdapter extends BaseExpandableListAdapter{
+    public class ExpandableListViewAdapter extends BaseExpandableListAdapter{
         private ArrayList<UserCategory> categoryGroupName;
         private ArrayList<ArrayList<BookBean>> bookItemsList;
 
