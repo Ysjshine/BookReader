@@ -2,6 +2,8 @@ package com.buaa.yushijie.bookreader.Services;
 
 import android.app.Service;
 
+import com.buaa.yushijie.bookreader.JavaBean.Comment;
+
 import java.io.DataOutputStream;
 import java.io.ObjectInputStream;
 import java.net.HttpURLConnection;
@@ -10,6 +12,7 @@ import java.util.ArrayList;
 
 import bean.BookBean;
 import bean.CommentBean;
+import bean.UserBean;
 
 /**
  * Created by yushijie on 17-5-19.
@@ -17,6 +20,8 @@ import bean.CommentBean;
 
 public class DownLoadCommentService {
     private static final String URL_DOWNLOAD_COMMENT_INFO="";
+    private static final String URL_GET_USER_INFO_BY_ID="";
+
     private BookBean currentBook;
     private HttpURLConnection conn = null;
     private URL url = null;
@@ -50,6 +55,25 @@ public class DownLoadCommentService {
         ois.close();
         if(conn!=null) conn.disconnect();
         return commentBeanArrayList;
+    }
+
+    public UserBean getUserInfoById(int userId) throws Exception{
+        UserBean res = null;
+        connectToServer(URL_GET_USER_INFO_BY_ID);
+        DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
+        String info = "uid="+userId;
+        dos.writeBytes(info);
+        dos.flush();
+        dos.close();
+
+        ObjectInputStream ois = new ObjectInputStream(conn.getInputStream());
+        UserBean ub;
+        while((ub = (UserBean)ois.readObject())!= null){
+            res = ub;
+        }
+        ois.close();
+        if(conn!=null) conn.disconnect();
+        return res;
     }
 
 }
