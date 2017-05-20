@@ -7,6 +7,8 @@ package com.buaa.yushijie.bookreader.JavaBean;
 public class Comment {
     private String username;
     private String commentContent;
+    private int userID;
+    private int commentID;
 
     public String getUsername() {
         return username;
@@ -20,7 +22,23 @@ public class Comment {
         return commentContent;
     }
 
-    public void setCommentContent(String commentContent) {
+    public void setCommentContent(String commentContent){
         this.commentContent = commentContent;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    public int getCommentID() {
+        return commentID;
+    }
+
+    public void setCommentID(int commentID) {
+        this.commentID = commentID;
     }
 }
