@@ -7,6 +7,7 @@ import com.buaa.yushijie.bookreader.Fragments.MyBookShelfMainPartFragment;
 
 import java.util.ArrayList;
 
+import bean.BookBean;
 import bean.UserBean;
 import bean.UserCategory;
 
@@ -17,6 +18,7 @@ import bean.UserCategory;
 public class CurrentUser extends Application {
     private UserBean user;
     private ArrayList<UserCategory> userCategories;
+    private ArrayList<ArrayList<BookBean>> bookList;
     private MyBookShelfMainPartFragment.ExpandableListViewAdapter mAdapter;
 
 
@@ -42,6 +44,14 @@ public class CurrentUser extends Application {
 
     public void setAdapter(MyBookShelfMainPartFragment.ExpandableListViewAdapter mAdapter) {
         this.mAdapter = mAdapter;
+    }
+
+    public ArrayList<ArrayList<BookBean>> getBookList() {
+        return bookList;
+    }
+
+    public void setBookList(ArrayList<ArrayList<BookBean>> bookList) {
+        this.bookList = bookList;
     }
 
     public CurrentUser(){

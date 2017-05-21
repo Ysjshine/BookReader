@@ -1,6 +1,10 @@
 package com.buaa.yushijie.bookreader.Fragments;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -15,6 +19,7 @@ import android.widget.TextView;
 
 import com.buaa.yushijie.bookreader.JavaBean.Comment;
 import com.buaa.yushijie.bookreader.R;
+import com.buaa.yushijie.bookreader.Services.CurrentUser;
 import com.buaa.yushijie.bookreader.Services.DownLoadCommentService;
 
 import java.net.ConnectException;
@@ -34,31 +39,52 @@ public class CommentRecyclerFragmemt extends Fragment{
     private RecyclerView mRecyclerView;
     private CommentAdapter mAdpater;
     private BookBean currentBook;
-    private DownLoadCommentService service;
-
+    private Activity currentActivity;
     private ArrayList<CommentBean> commentBeanArrayList = null;
-    private ArrayList<UserBean> userBeanArrayList = null;
 
-    List<Comment> commentList = new ArrayList<>();
     public void setCurrentBook(BookBean currentBook) {
         this.currentBook = currentBook;
     }
 
+    public void setCommentBeanArrayList(ArrayList<CommentBean> commentBeanArrayList) {
+        this.commentBeanArrayList = commentBeanArrayList;
+    }
+
+    private Handler  handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what  == 1) {
+                commentBeanArrayList = (ArrayList<CommentBean>) msg.obj;
+                mAdpater = new CommentAdapter(commentBeanArrayList);
+                mRecyclerView.setAdapter(mAdpater);
+            }
+        }
+    };
+
+
+    @Nullable
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        service = new DownLoadCommentService(currentBook);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+       View v = inflater.inflate(R.layout.comment_recycle_list_layout,container,false);
+        currentActivity = getActivity();
+        mRecyclerView = (RecyclerView)v.findViewById(R.id.comment_list_recycler);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        updateUI();
 
+        return v;
+    }
 
-        //get user and comment info
+    private void updateUI(){
+            //get comment info
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try{
-                    commentBeanArrayList = service.getCommentInfo();
-                    for(CommentBean cb:commentBeanArrayList){
-                        userBeanArrayList.add(service.getUserInfoById(cb.UserID));
-                    }
+                    DownLoadCommentService service = new DownLoadCommentService(currentBook);
+                    Message msg = new Message();
+                    msg.obj = service.getCommentInfo();
+                    msg.what = 1;
+                    handler.sendMessage(msg);
                 }catch (Exception e){
                     if(e instanceof ConnectException){
                         //timeout
@@ -67,35 +93,18 @@ public class CommentRecyclerFragmemt extends Fragment{
                 }
             }
         }).start();
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-       View v = inflater.inflate(R.layout.comment_recycle_list_layout,container,false);
-        mRecyclerView = (RecyclerView)v.findViewById(R.id.comment_list_recycler);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        updateUI();
-        return v;
-    }
-
-    private void updateUI(){
-        for(int i=0;i<userBeanArrayList.size();i++){
-            Comment c = new Comment();
-            c.setCommentContent("     "+commentBeanArrayList.get(i).contents);
-            c.setUsername(userBeanArrayList.get(i).nickname);
-            c.setUserID(userBeanArrayList.get(i).UserID);
-            c.setCommentID(commentBeanArrayList.get(i).CommentID);
-            commentList.add(c);
-        }
-        mAdpater = new CommentAdapter(commentList);
-        mRecyclerView.setAdapter(mAdpater);
 
     }
 
     private class CommentHolder extends RecyclerView.ViewHolder{
         private TextView mUserNameTextView;
         private TextView mCommentContentTextView;
+        private CommentBean commentBean;
+
+        public void setCommentBean(CommentBean commentBean) {
+            this.commentBean = commentBean;
+        }
+
         public CommentHolder(View itemView) {
             super(itemView);
             mUserNameTextView = (TextView)itemView.findViewById(R.id.comment_username);
@@ -105,21 +114,27 @@ public class CommentRecyclerFragmemt extends Fragment{
                 @Override
                 public boolean onLongClick(View v) {
                     //pop delete dialog
+                    int x = ((CurrentUser)currentActivity.getApplication()).getUser().UserID;
+                    if(commentBean.UserID == x ){
+                        DeleteACommentDialogFragment dialogFragment = new DeleteACommentDialogFragment();
+                        dialogFragment.setCommentBean(commentBean);
+                        dialogFragment.show(getFragmentManager(),"Delete");
+                    }
                     return false;
                 }
             });
         }
 
-        public void bindCommentData(Comment c) {
-            mUserNameTextView.setText(c.getUsername());
-            mCommentContentTextView.setText(c.getCommentContent());
+        public void bindCommentData() {
+            mUserNameTextView.setText(commentBean.nickname);
+            mCommentContentTextView.setText(commentBean.contents);
         }
     }
 
     private class CommentAdapter extends RecyclerView.Adapter<CommentHolder>{
-        List<Comment> commentList;
+        List<CommentBean> commentList;
 
-        public CommentAdapter(List<Comment> Co) {
+        public CommentAdapter(List<CommentBean> Co) {
             commentList = Co;
         }
 
@@ -131,8 +146,9 @@ public class CommentRecyclerFragmemt extends Fragment{
 
         @Override
         public void onBindViewHolder(CommentHolder holder, int position) {
-            Comment tp = commentList.get(position);
-            holder.bindCommentData(tp);
+            CommentBean tp = commentList.get(position);
+            holder.setCommentBean(tp);
+            holder.bindCommentData();
         }
 
         @Override

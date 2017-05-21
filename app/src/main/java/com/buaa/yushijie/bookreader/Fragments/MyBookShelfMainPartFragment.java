@@ -61,6 +61,7 @@ public class MyBookShelfMainPartFragment extends Fragment implements Serializabl
             mBookShelfExpandableListView.setAdapter(mAdapter);
             CurrentUser cu = (CurrentUser)currentActivity.getApplication();
             cu.setAdapter(mAdapter);
+            cu.setBookList(bookItemsLists);
         }
     };
 
@@ -148,6 +149,9 @@ public class MyBookShelfMainPartFragment extends Fragment implements Serializabl
                     BookBean bookBean = bookItemsLists.get(groupPosition).get(childPosition);
                     MyBookShelfDeleteABookDialogFragment dialog = new MyBookShelfDeleteABookDialogFragment();
                     dialog.setBookBean(bookBean);
+                    dialog.setGroupPos(groupPosition);
+                    dialog.setSelectedItemsPos(childPosition);
+                    dialog.setUserCategory(categoryGroupNames.get(groupPosition));
                     dialog.show(getFragmentManager(),"Delete a book");
                     return true;
                 }else if(ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_GROUP){
@@ -157,6 +161,7 @@ public class MyBookShelfMainPartFragment extends Fragment implements Serializabl
                     UserCategory userCategory = categoryGroupNames.get(groupPosition);
                     MyBookShelfDeleteACategoryDialogFragment dialog = new MyBookShelfDeleteACategoryDialogFragment();
                     dialog.setUserCategory(userCategory);
+                    dialog.setSelectedItemPos(groupPosition);
                     dialog.show(getFragmentManager(),"Delete a category");
                     return true;
                 }

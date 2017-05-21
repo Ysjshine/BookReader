@@ -1,5 +1,6 @@
 package com.buaa.yushijie.bookreader.Fragments;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -26,24 +27,33 @@ import bean.UserCategory;
 public class MyBookShelfDeleteACategoryDialogFragment extends DialogFragment {
     private UserBean userBean;
     private UserCategory userCategory;
+    private Activity currentActivity;
+    private int selectedItemPos;
 
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 0:
-                    Toast.makeText(getActivity(),"删除失败,请稍后再试",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(currentActivity,"删除失败,请稍后再试",Toast.LENGTH_SHORT).show();
                     break;
                 case 1:
-                    Toast.makeText(getActivity(),"删除成功",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(currentActivity,"删除成功",Toast.LENGTH_SHORT).show();
+                    CurrentUser cu = (CurrentUser)currentActivity.getApplication();
+                    cu.getBookList().remove(selectedItemPos);
+                    cu.getUserCategories().remove(selectedItemPos);
+                    cu.getAdapter().notifyDataSetChanged();
                     break;
                 case 2:
-                    Toast.makeText(getActivity(),"网络连接超时",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(currentActivity,"网络连接超时",Toast.LENGTH_SHORT).show();
                     break;
             }
         }
     };
 
+    public void setSelectedItemPos(int selectedItemPos) {
+        this.selectedItemPos = selectedItemPos;
+    }
 
     public void setUserCategory(UserCategory userCategory) {
         this.userCategory = userCategory;
@@ -52,12 +62,14 @@ public class MyBookShelfDeleteACategoryDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog dialog = new AlertDialog.Builder(getActivity())
+        currentActivity = getActivity();
+        Dialog dialog = new AlertDialog.Builder(currentActivity)
                 .setTitle("确定删除该分类？")
                 .setNegativeButton("Cancel",null)
                 .setPositiveButton("OK",new ConfirmButtonListener())
@@ -69,7 +81,7 @@ public class MyBookShelfDeleteACategoryDialogFragment extends DialogFragment {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             //send category info;
-            userBean = ((CurrentUser)getActivity().getApplication()).getUser();
+            userBean = ((CurrentUser)currentActivity.getApplication()).getUser();
             new Thread(new Runnable() {
                 @Override
                 public void run() {

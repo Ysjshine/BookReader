@@ -22,6 +22,7 @@ import com.buaa.yushijie.bookreader.Services.SQLUpload;
 import java.net.ConnectException;
 import java.util.ArrayList;
 
+import bean.BookBean;
 import bean.UserBean;
 import bean.UserCategory;
 
@@ -53,6 +54,8 @@ public class CategorySetDialogFragment extends DialogFragment {
                     CurrentUser cu = (CurrentUser) currentActivity.getApplication();
                     cu.getUserCategories().clear();
                     cu.getUserCategories().addAll((ArrayList<UserCategory>)msg.obj);
+                    ArrayList<BookBean> b = new ArrayList<>();
+                    cu.getBookList().add(b);
                     cu.getAdapter().notifyDataSetChanged();
                 }
 
@@ -89,9 +92,8 @@ public class CategorySetDialogFragment extends DialogFragment {
                         try {
                             SQLUpload.sendCategoryString(ub,category);
 
-                            //get category
+                            //get category again
                             DownLoadMyBookShelfService services = new DownLoadMyBookShelfService();
-
                             Message msg = new Message();
                             msg.what = 1;
                             msg.obj = services.getCategoryNameList(ub.account);

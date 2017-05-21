@@ -18,6 +18,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import bean.BookBean;
+import bean.CommentBean;
 import bean.UserBean;
 import bean.UserCategory;
 
@@ -30,10 +31,11 @@ public class SQLUpload {
     private static final String URL_SEND_CATEGORY = "http://120.25.89.166/BookReaderServer/AddCategory";
     private static final String URL_SEND_NEW_NICKNAME="http://120.25.89.166/BookReaderServer/UserInfo";
     private static final String URL_SEND_NEW_PASSWORD="http://120.25.89.166/BookReaderServer/UserInfo";
-    private static final String URL_SEND_COMMENT="";
-    private static final String URL_SEND_DELETING_BOOK_INFO="";
-    private static final String URL_SEND_DELETING_CATEGORY_INFO="";
-    private static final String URL_SEND_COLLECTION_INFO="";
+    private static final String URL_SEND_COMMENT="http://120.25.89.166/BookReaderServer/AddComment";
+    private static final String URL_SEND_DELETING_BOOK_INFO="http://120.25.89.166/BookReaderServer/UnCollectBook";
+    private static final String URL_SEND_DELETING_CATEGORY_INFO="http://120.25.89.166/BookReaderServer/DeleteCategory";
+    private static final String URL_SEND_COLLECTION_INFO="http://120.25.89.166/BookReaderServer/CollectBook";
+    private static final String URL_SEND_DELETE_COMMENT_INFO="http://120.25.89.166/BookReaderServer/DeleteComment";
 
     private static HttpURLConnection conn = null;
     private static URL url = null;
@@ -92,15 +94,16 @@ public class SQLUpload {
     }
 
     //send comment
-    public static void sendComment(UserBean ub,String comment) throws Exception{
+    public static void sendComment(UserBean ub,BookBean bookBean,String comment,Handler handler) throws Exception{
         connectToServer(URL_SEND_COMMENT);
         DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
-        String info = "username="+ub.account+"&"
-                +"comment="+comment;
+        String info = "uid="+ub.UserID+"&"
+                +"bid="+bookBean.BookID+"&"
+                +"contents="+EncodeAndDecode.encodeString(comment);
         dos.writeBytes(info);
         dos.flush();
         dos.close();
-        conn.getResponseCode();
+        getReturnInfo(handler);
         if(conn!=null)conn.disconnect();
     }
 
@@ -111,7 +114,7 @@ public class SQLUpload {
         while((stp = br.readLine())!=null){
             sb.append(stp);
         }
-        if(sb.equals("1")){
+        if(sb.toString().equals("1")){
             Message msg = new Message();
             msg.what = 1;
             handler.sendMessage(msg);
@@ -122,11 +125,12 @@ public class SQLUpload {
         }
     }
     //send deleting book info
-    public static void sendDeleteCollectionBookInfo(UserBean ub, BookBean bookBean,
+    public static void sendDeleteCollectionBookInfo(UserBean ub, BookBean bookBean,UserCategory userCategory,
                                                     Handler handler) throws Exception{
         connectToServer(URL_SEND_DELETING_BOOK_INFO);
         DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
         String info = "uid="+ub.UserID+"&"
+                +"cid="+userCategory.CategoryID+"&"
                 +"bid="+bookBean.BookID;
         dos.writeBytes(info);
         dos.flush();
@@ -158,6 +162,20 @@ public class SQLUpload {
         String info = "uid="+userBean.UserID+"&"
                 +"cid="+userCategory.CategoryID+"&"
                 +"bid="+bookBean.BookID;
+        dos.writeBytes(info);
+        dos.flush();
+        dos.close();
+        getReturnInfo(handler);
+        if(conn!=null)conn.disconnect();
+    }
+
+    //delete a comment
+    public static void sendDeleteCommentInfo(UserBean userBean, CommentBean commentBean,
+                                             Handler handler) throws Exception{
+        connectToServer(URL_SEND_DELETE_COMMENT_INFO);
+        DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
+        String info = "uid="+userBean.UserID+"&"
+                +"coid="+commentBean.CommentID;
         dos.writeBytes(info);
         dos.flush();
         dos.close();

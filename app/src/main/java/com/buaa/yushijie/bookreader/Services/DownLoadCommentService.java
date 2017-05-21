@@ -1,6 +1,7 @@
 package com.buaa.yushijie.bookreader.Services;
 
 import android.app.Service;
+import android.util.Log;
 
 import com.buaa.yushijie.bookreader.JavaBean.Comment;
 
@@ -19,8 +20,7 @@ import bean.UserBean;
  */
 
 public class DownLoadCommentService {
-    private static final String URL_DOWNLOAD_COMMENT_INFO="";
-    private static final String URL_GET_USER_INFO_BY_ID="";
+    private static final String URL_DOWNLOAD_COMMENT_INFO="http://120.25.89.166/BookReaderServer/QueryComment";
 
     private BookBean currentBook;
     private HttpURLConnection conn = null;
@@ -52,28 +52,12 @@ public class DownLoadCommentService {
         while((cb=(CommentBean)ois.readObject())!=null){
             commentBeanArrayList.add(cb);
         }
+
+        Log.e("ww", "getCommentInfo: "+commentBeanArrayList.size() );
         ois.close();
         if(conn!=null) conn.disconnect();
         return commentBeanArrayList;
     }
 
-    public UserBean getUserInfoById(int userId) throws Exception{
-        UserBean res = null;
-        connectToServer(URL_GET_USER_INFO_BY_ID);
-        DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
-        String info = "uid="+userId;
-        dos.writeBytes(info);
-        dos.flush();
-        dos.close();
-
-        ObjectInputStream ois = new ObjectInputStream(conn.getInputStream());
-        UserBean ub;
-        while((ub = (UserBean)ois.readObject())!= null){
-            res = ub;
-        }
-        ois.close();
-        if(conn!=null) conn.disconnect();
-        return res;
-    }
 
 }

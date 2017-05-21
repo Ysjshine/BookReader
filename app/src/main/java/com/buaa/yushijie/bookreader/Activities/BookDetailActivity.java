@@ -15,34 +15,41 @@ import com.buaa.yushijie.bookreader.R;
 
 import bean.BookBean;
 
+
 /**
  * Created by yushijie on 17-4-30.
  */
 
 public class BookDetailActivity extends FragmentActivity {
     private BookDatailFragment bookDatailFragment = new BookDatailFragment();
+    private CommentRecyclerFragmemt commentRecyclerFragmemt = new CommentRecyclerFragmemt();
     private final static String BOOKKEY="BOOKITEM";
     private static final String TAG = "comment";
     private BookBean currentBook;
     private Button readBookButton;
     private Button collectBookButton;
     private Button commentButton;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_datail_layout);
+        currentBook = (BookBean) getIntent().getSerializableExtra(BOOKKEY);
 
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.navigation_book_datail_container,new BookDatailNavigationFragment())
                 .commit();
-        currentBook = (BookBean) getIntent().getSerializableExtra(BOOKKEY);
+
         bookDatailFragment.setBook(currentBook);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.book_detail_fragment_container,bookDatailFragment)
                 .commit();
 
+
+        commentRecyclerFragmemt.setCurrentBook(currentBook);
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.comment_recyle_list,new CommentRecyclerFragmemt())
+                .add(R.id.comment_recyle_list,commentRecyclerFragmemt)
                 .commit();
 
         readBookButton = (Button)findViewById(R.id.book_detail_read_button);
@@ -53,6 +60,7 @@ public class BookDetailActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 CommentDialogFragment dialog = new CommentDialogFragment();
+                dialog.setCurrentBook(currentBook);
                 dialog.show(getSupportFragmentManager(),TAG);
             }
         });
@@ -67,4 +75,6 @@ public class BookDetailActivity extends FragmentActivity {
             }
         });
     }
+
+
 }

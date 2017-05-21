@@ -1,5 +1,6 @@
 package com.buaa.yushijie.bookreader.Fragments;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import java.util.concurrent.TimeoutException;
 
 import bean.BookBean;
 import bean.UserBean;
+import bean.UserCategory;
 
 /**
  * Created by yushijie on 17-5-18.
@@ -26,19 +28,26 @@ import bean.UserBean;
 public class MyBookShelfDeleteABookDialogFragment extends DialogFragment {
     private BookBean bookBean;
     private UserBean userBean;
+    private UserCategory userCategory;
+    private Activity currentActivity;
 
+    private int groupPos;
+    private int selectedItemsPos;
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
              switch (msg.what){
                  case 0:
-                     Toast.makeText(getActivity(),"删除失败,请稍后再试",Toast.LENGTH_SHORT).show();
+                     Toast.makeText(currentActivity,"删除失败,请稍后再试",Toast.LENGTH_SHORT).show();
                      break;
                  case 1:
-                     Toast.makeText(getActivity(),"删除成功",Toast.LENGTH_SHORT).show();
+                     Toast.makeText(currentActivity,"删除成功",Toast.LENGTH_SHORT).show();
+                     CurrentUser cu = (CurrentUser)currentActivity.getApplication();
+                     cu.getBookList().get(groupPos).remove(selectedItemsPos);
+                     cu.getAdapter().notifyDataSetChanged();
                      break;
                  case 2:
-                     Toast.makeText(getActivity(),"网络连接超时",Toast.LENGTH_SHORT).show();
+                     Toast.makeText(currentActivity,"网络连接超时",Toast.LENGTH_SHORT).show();
                      break;
              }
         }
@@ -48,6 +57,18 @@ public class MyBookShelfDeleteABookDialogFragment extends DialogFragment {
         this.bookBean = bookBean;
     }
 
+    public void setUserCategory(UserCategory userCategory) {
+        this.userCategory = userCategory;
+    }
+
+    public void setGroupPos(int groupPos) {
+        this.groupPos = groupPos;
+    }
+
+
+    public void setSelectedItemsPos(int selectedItemsPos) {
+        this.selectedItemsPos = selectedItemsPos;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,7 +78,8 @@ public class MyBookShelfDeleteABookDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog dialog = new AlertDialog.Builder(getActivity())
+        currentActivity = getActivity();
+        Dialog dialog = new AlertDialog.Builder(currentActivity)
                 .setTitle("确定移除该书籍")
                 .setNegativeButton("Cancel",null)
                 .setPositiveButton("OK",new ConfirmButtonListener())
@@ -69,12 +91,12 @@ public class MyBookShelfDeleteABookDialogFragment extends DialogFragment {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             //send the book info;
-            userBean = ((CurrentUser)getActivity().getApplication()).getUser();
+            userBean = ((CurrentUser)currentActivity.getApplication()).getUser();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try{
-                        SQLUpload.sendDeleteCollectionBookInfo(userBean,bookBean,handler);
+                        SQLUpload.sendDeleteCollectionBookInfo(userBean,bookBean,userCategory,handler);
                     }catch (Exception e){
                         if(e instanceof TimeoutException){
                             //timeout
