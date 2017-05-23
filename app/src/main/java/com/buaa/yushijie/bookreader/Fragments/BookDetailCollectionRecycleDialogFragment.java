@@ -13,8 +13,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.buaa.yushijie.bookreader.Services.CurrentUser;
-import com.buaa.yushijie.bookreader.Services.DownLoadMyBookShelfService;
+import com.buaa.yushijie.bookreader.Services.CurrentApplication;
 import com.buaa.yushijie.bookreader.Services.SQLUpload;
 
 import java.net.ConnectException;
@@ -32,7 +31,7 @@ public class BookDetailCollectionRecycleDialogFragment extends DialogFragment {
 
     private int selectedIndex = 0;
     private Activity currentActivity;
-    private CurrentUser cu ;
+    private CurrentApplication cu ;
     private BookBean bookBean;
     UserCategory userCategory;
 
@@ -44,7 +43,7 @@ public class BookDetailCollectionRecycleDialogFragment extends DialogFragment {
                     Toast.makeText(currentActivity,"书籍已存在",Toast.LENGTH_SHORT).show();
                 }else if(msg.what == 1){
                     Toast.makeText(currentActivity,"添加成功",Toast.LENGTH_SHORT).show();
-                    CurrentUser cu = (CurrentUser)currentActivity.getApplication();
+                    CurrentApplication cu = (CurrentApplication)currentActivity.getApplication();
                     ArrayList<ArrayList<BookBean>> b =  cu.getBookList();
 
                     b.get(selectedIndex).add(bookBean);
@@ -64,7 +63,7 @@ public class BookDetailCollectionRecycleDialogFragment extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         currentActivity = getActivity();
-        cu =  (CurrentUser)currentActivity.getApplication();
+        cu =  (CurrentApplication)currentActivity.getApplication();
 
     }
 

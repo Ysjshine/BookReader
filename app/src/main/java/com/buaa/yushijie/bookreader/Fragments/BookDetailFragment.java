@@ -24,7 +24,7 @@ import bean.BookBean;
  * Created by yushijie on 17-4-30.
  */
 
-public class BookDatailFragment extends Fragment {
+public class BookDetailFragment extends Fragment {
     private ImageView cover;
     private TextView title;
     private TextView author;

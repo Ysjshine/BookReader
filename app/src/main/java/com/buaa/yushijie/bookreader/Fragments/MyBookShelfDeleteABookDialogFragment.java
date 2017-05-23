@@ -12,7 +12,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
-import com.buaa.yushijie.bookreader.Services.CurrentUser;
+import com.buaa.yushijie.bookreader.Services.CurrentApplication;
 import com.buaa.yushijie.bookreader.Services.SQLUpload;
 
 import java.util.concurrent.TimeoutException;
@@ -42,7 +42,7 @@ public class MyBookShelfDeleteABookDialogFragment extends DialogFragment {
                      break;
                  case 1:
                      Toast.makeText(currentActivity,"删除成功",Toast.LENGTH_SHORT).show();
-                     CurrentUser cu = (CurrentUser)currentActivity.getApplication();
+                     CurrentApplication cu = (CurrentApplication)currentActivity.getApplication();
                      cu.getBookList().get(groupPos).remove(selectedItemsPos);
                      cu.getAdapter().notifyDataSetChanged();
                      break;
@@ -91,7 +91,7 @@ public class MyBookShelfDeleteABookDialogFragment extends DialogFragment {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             //send the book info;
-            userBean = ((CurrentUser)currentActivity.getApplication()).getUser();
+            userBean = ((CurrentApplication)currentActivity.getApplication()).getUser();
             new Thread(new Runnable() {
                 @Override
                 public void run() {

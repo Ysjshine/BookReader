@@ -6,11 +6,11 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
 
-import com.buaa.yushijie.bookreader.Fragments.BookDatailFragment;
+import com.buaa.yushijie.bookreader.Fragments.BookDetailFragment;
 import com.buaa.yushijie.bookreader.Fragments.BookDatailNavigationFragment;
 import com.buaa.yushijie.bookreader.Fragments.BookDetailCollectionRecycleDialogFragment;
 import com.buaa.yushijie.bookreader.Fragments.CommentDialogFragment;
-import com.buaa.yushijie.bookreader.Fragments.CommentRecyclerFragmemt;
+import com.buaa.yushijie.bookreader.Fragments.CommentRecyclerFragment;
 import com.buaa.yushijie.bookreader.R;
 
 import bean.BookBean;
@@ -21,8 +21,8 @@ import bean.BookBean;
  */
 
 public class BookDetailActivity extends FragmentActivity {
-    private BookDatailFragment bookDatailFragment = new BookDatailFragment();
-    private CommentRecyclerFragmemt commentRecyclerFragmemt = new CommentRecyclerFragmemt();
+    private BookDetailFragment bookDatailFragment = new BookDetailFragment();
+    private CommentRecyclerFragment commentRecyclerFragment = new CommentRecyclerFragment();
     private final static String BOOKKEY="BOOKITEM";
     private static final String TAG = "comment";
     private BookBean currentBook;
@@ -47,9 +47,9 @@ public class BookDetailActivity extends FragmentActivity {
                 .commit();
 
 
-        commentRecyclerFragmemt.setCurrentBook(currentBook);
+        commentRecyclerFragment.setCurrentBook(currentBook);
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.comment_recyle_list,commentRecyclerFragmemt)
+                .add(R.id.comment_recyle_list, commentRecyclerFragment)
                 .commit();
 
         readBookButton = (Button)findViewById(R.id.book_detail_read_button);

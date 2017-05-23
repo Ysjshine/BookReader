@@ -16,7 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.buaa.yushijie.bookreader.R;
-import com.buaa.yushijie.bookreader.Services.CurrentUser;
+import com.buaa.yushijie.bookreader.Services.CurrentApplication;
 import com.buaa.yushijie.bookreader.Services.DownLoadMyBookShelfService;
 import com.buaa.yushijie.bookreader.Services.SQLUpload;
 import java.net.ConnectException;
@@ -51,7 +51,7 @@ public class CategorySetDialogFragment extends DialogFragment {
                     Toast.makeText(currentActivity, "添加成功", Toast.LENGTH_SHORT).show();
 
                     //Synchronized the data;
-                    CurrentUser cu = (CurrentUser) currentActivity.getApplication();
+                    CurrentApplication cu = (CurrentApplication) currentActivity.getApplication();
                     cu.getUserCategories().clear();
                     cu.getUserCategories().addAll((ArrayList<UserCategory>)msg.obj);
                     ArrayList<BookBean> b = new ArrayList<>();
@@ -82,7 +82,7 @@ public class CategorySetDialogFragment extends DialogFragment {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             String category = categoryEditText.getText().toString();
-            CurrentUser cu = (CurrentUser)currentActivity.getApplication();
+            CurrentApplication cu = (CurrentApplication)currentActivity.getApplication();
             UserBean ub = cu.getUser();
 
             if (!category.equals("")) {

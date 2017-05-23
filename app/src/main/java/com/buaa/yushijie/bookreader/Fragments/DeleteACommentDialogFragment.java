@@ -11,11 +11,14 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
-import com.buaa.yushijie.bookreader.Services.CurrentUser;
+import com.buaa.yushijie.bookreader.Services.CurrentApplication;
+import com.buaa.yushijie.bookreader.Services.DownLoadCommentService;
 import com.buaa.yushijie.bookreader.Services.SQLUpload;
 
 import java.net.ConnectException;
+import java.util.ArrayList;
 
+import bean.BookBean;
 import bean.CommentBean;
 import bean.UserBean;
 
@@ -28,7 +31,11 @@ public class DeleteACommentDialogFragment extends DialogFragment {
     private Activity currentActivity;
     private CommentBean commentBean;
     private UserBean userBean;
+    private BookBean currentBook;
 
+    public void setCurrentBook(BookBean currentBook) {
+        this.currentBook = currentBook;
+    }
 
     private Handler handler = new Handler(){
         @Override
@@ -39,6 +46,22 @@ public class DeleteACommentDialogFragment extends DialogFragment {
                     break;
                 case 1:
                     Toast.makeText(currentActivity,"删除成功",Toast.LENGTH_SHORT).show();
+                    CurrentApplication currentApplication = (CurrentApplication)currentActivity.getApplication();
+                    ArrayList<CommentBean> commentBeanArrayList = currentApplication.getCommentBeanArrayList();
+                    commentBeanArrayList.clear();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                DownLoadCommentService service = new DownLoadCommentService(currentBook);
+                                commentBeanArrayList.clear();
+                                commentBeanArrayList.addAll(service.getCommentInfo());
+                                currentApplication.getCurrentAdapter().notifyDataSetChanged();
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
                     break;
                 case 2:
                     Toast.makeText(currentActivity,"网络连接超时",Toast.LENGTH_SHORT).show();
@@ -66,7 +89,7 @@ public class DeleteACommentDialogFragment extends DialogFragment {
     private class ConfirmButtonListener implements DialogInterface.OnClickListener{
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            CurrentUser cu = (CurrentUser)getActivity().getApplication();
+            CurrentApplication cu = (CurrentApplication)getActivity().getApplication();
             userBean = cu.getUser();
             new Thread(new Runnable() {
                 @Override

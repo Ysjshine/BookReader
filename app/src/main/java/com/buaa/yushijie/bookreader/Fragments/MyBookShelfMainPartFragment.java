@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
@@ -21,14 +20,13 @@ import android.widget.TextView;
 import com.buaa.yushijie.bookreader.Activities.BookDetailActivity;
 import com.buaa.yushijie.bookreader.R;
 import com.buaa.yushijie.bookreader.Services.AsynTaskLoadImg;
-import com.buaa.yushijie.bookreader.Services.CurrentUser;
+import com.buaa.yushijie.bookreader.Services.CurrentApplication;
 import com.buaa.yushijie.bookreader.Services.DownLoadBookInfoService;
 import com.buaa.yushijie.bookreader.Services.DownLoadMyBookShelfService;
 
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.concurrent.TimeoutException;
 
 import bean.BookBean;
 import bean.UserBean;
@@ -59,7 +57,7 @@ public class MyBookShelfMainPartFragment extends Fragment implements Serializabl
             bookItemsLists.add((ArrayList<BookBean>)msg.obj);
             mAdapter = new ExpandableListViewAdapter(categoryGroupNames,bookItemsLists);
             mBookShelfExpandableListView.setAdapter(mAdapter);
-            CurrentUser cu = (CurrentUser)currentActivity.getApplication();
+            CurrentApplication cu = (CurrentApplication)currentActivity.getApplication();
             cu.setAdapter(mAdapter);
             cu.setBookList(bookItemsLists);
         }
@@ -86,7 +84,7 @@ public class MyBookShelfMainPartFragment extends Fragment implements Serializabl
         @Override
         public void run() {
             try{
-                UserBean ub = ((CurrentUser) currentActivity.getApplication()).getUser();
+                UserBean ub = ((CurrentApplication) currentActivity.getApplication()).getUser();
                 for(int i=0;i<category.size();i++) {
                     Message msg = new Message();
                     msg.what = 1;
@@ -100,7 +98,7 @@ public class MyBookShelfMainPartFragment extends Fragment implements Serializabl
     }
     //get every category book
     public void getData(){
-        categoryGroupNames = ((CurrentUser)currentActivity.getApplication()).getUserCategories();
+        categoryGroupNames = ((CurrentApplication)currentActivity.getApplication()).getUserCategories();
            DownLoadBookBeanOfEveryCategoryThread t =
                    new DownLoadBookBeanOfEveryCategoryThread(categoryGroupNames);
             t.start();
@@ -160,9 +158,11 @@ public class MyBookShelfMainPartFragment extends Fragment implements Serializabl
                     int groupPosition=ExpandableListView.getPackedPositionGroup(packPos);
                     UserCategory userCategory = categoryGroupNames.get(groupPosition);
                     MyBookShelfDeleteACategoryDialogFragment dialog = new MyBookShelfDeleteACategoryDialogFragment();
-                    dialog.setUserCategory(userCategory);
-                    dialog.setSelectedItemPos(groupPosition);
-                    dialog.show(getFragmentManager(),"Delete a category");
+                    if(userCategory.CategoryID != 1) {
+                        dialog.setUserCategory(userCategory);
+                        dialog.setSelectedItemPos(groupPosition);
+                        dialog.show(getFragmentManager(), "Delete a category");
+                    }
                     return true;
                 }
                 return false;

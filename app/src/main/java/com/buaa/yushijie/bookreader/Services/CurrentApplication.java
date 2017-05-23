@@ -2,12 +2,14 @@ package com.buaa.yushijie.bookreader.Services;
 
 import android.app.Application;
 
+import com.buaa.yushijie.bookreader.Fragments.CommentRecyclerFragment;
 import com.buaa.yushijie.bookreader.Fragments.MyBookShelfDeleteACategoryDialogFragment;
 import com.buaa.yushijie.bookreader.Fragments.MyBookShelfMainPartFragment;
 
 import java.util.ArrayList;
 
 import bean.BookBean;
+import bean.CommentBean;
 import bean.UserBean;
 import bean.UserCategory;
 
@@ -15,11 +17,29 @@ import bean.UserCategory;
  * Created by yushijie on 17-5-16.
  */
 
-public class CurrentUser extends Application {
+public class CurrentApplication extends Application {
     private UserBean user;
     private ArrayList<UserCategory> userCategories;
     private ArrayList<ArrayList<BookBean>> bookList;
     private MyBookShelfMainPartFragment.ExpandableListViewAdapter mAdapter;
+    private CommentRecyclerFragment.CommentAdapter currentAdapter;
+    private ArrayList<CommentBean> commentBeanArrayList;
+
+    public CommentRecyclerFragment.CommentAdapter getCurrentAdapter() {
+        return currentAdapter;
+    }
+
+    public void setCurrentAdapter(CommentRecyclerFragment.CommentAdapter currentAdapter) {
+        this.currentAdapter = currentAdapter;
+    }
+
+    public ArrayList<CommentBean> getCommentBeanArrayList() {
+        return commentBeanArrayList;
+    }
+
+    public void setCommentBeanArrayList(ArrayList<CommentBean> commentBeanArrayList) {
+        this.commentBeanArrayList = commentBeanArrayList;
+    }
 
 
     public UserBean getUser() {
@@ -54,7 +74,7 @@ public class CurrentUser extends Application {
         this.bookList = bookList;
     }
 
-    public CurrentUser(){
+    public CurrentApplication(){
     }
 
     @Override

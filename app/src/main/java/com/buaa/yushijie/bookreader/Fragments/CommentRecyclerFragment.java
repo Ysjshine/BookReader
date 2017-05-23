@@ -1,15 +1,11 @@
 package com.buaa.yushijie.bookreader.Fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.widget.TextViewCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,9 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.buaa.yushijie.bookreader.JavaBean.Comment;
 import com.buaa.yushijie.bookreader.R;
-import com.buaa.yushijie.bookreader.Services.CurrentUser;
+import com.buaa.yushijie.bookreader.Services.CurrentApplication;
 import com.buaa.yushijie.bookreader.Services.DownLoadCommentService;
 
 import java.net.ConnectException;
@@ -28,13 +23,12 @@ import java.util.List;
 
 import bean.BookBean;
 import bean.CommentBean;
-import bean.UserBean;
 
 /**
  * Created by yushijie on 17-4-30.
  */
 
-public class CommentRecyclerFragmemt extends Fragment{
+public class CommentRecyclerFragment extends Fragment{
 
     private RecyclerView mRecyclerView;
     private CommentAdapter mAdpater;
@@ -46,9 +40,6 @@ public class CommentRecyclerFragmemt extends Fragment{
         this.currentBook = currentBook;
     }
 
-    public void setCommentBeanArrayList(ArrayList<CommentBean> commentBeanArrayList) {
-        this.commentBeanArrayList = commentBeanArrayList;
-    }
 
     private Handler  handler = new Handler(){
         @Override
@@ -57,6 +48,11 @@ public class CommentRecyclerFragmemt extends Fragment{
                 commentBeanArrayList = (ArrayList<CommentBean>) msg.obj;
                 mAdpater = new CommentAdapter(commentBeanArrayList);
                 mRecyclerView.setAdapter(mAdpater);
+
+                //set global variable
+                CurrentApplication current = (CurrentApplication)currentActivity.getApplication();
+                current.setCommentBeanArrayList(commentBeanArrayList);
+                current.setCurrentAdapter(mAdpater);
             }
         }
     };
@@ -114,10 +110,11 @@ public class CommentRecyclerFragmemt extends Fragment{
                 @Override
                 public boolean onLongClick(View v) {
                     //pop delete dialog
-                    int x = ((CurrentUser)currentActivity.getApplication()).getUser().UserID;
+                    int x = ((CurrentApplication)currentActivity.getApplication()).getUser().UserID;
                     if(commentBean.UserID == x ){
                         DeleteACommentDialogFragment dialogFragment = new DeleteACommentDialogFragment();
                         dialogFragment.setCommentBean(commentBean);
+                        dialogFragment.setCurrentBook(currentBook);
                         dialogFragment.show(getFragmentManager(),"Delete");
                     }
                     return false;
@@ -131,7 +128,7 @@ public class CommentRecyclerFragmemt extends Fragment{
         }
     }
 
-    private class CommentAdapter extends RecyclerView.Adapter<CommentHolder>{
+    public class CommentAdapter extends RecyclerView.Adapter<CommentHolder>{
         List<CommentBean> commentList;
 
         public CommentAdapter(List<CommentBean> Co) {

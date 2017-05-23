@@ -1,37 +1,25 @@
 package com.buaa.yushijie.bookreader;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.ExpandableListView;
-import android.widget.TextView;
 
-import com.buaa.yushijie.bookreader.Activities.BookDetailActivity;
-import com.buaa.yushijie.bookreader.Activities.BookListActivity;
 import com.buaa.yushijie.bookreader.Fragments.AboutMeFragment;
 import com.buaa.yushijie.bookreader.Fragments.AboutMeNavigationFragment;
 import com.buaa.yushijie.bookreader.Fragments.BookCategoryFragment;
-import com.buaa.yushijie.bookreader.Fragments.BookFragment;
 import com.buaa.yushijie.bookreader.Fragments.MyBookShelfMainPartFragment;
 import com.buaa.yushijie.bookreader.Fragments.MyBookShelfNavigationFragment;
 import com.buaa.yushijie.bookreader.Fragments.NavigationFragment;
-import com.buaa.yushijie.bookreader.Services.CurrentUser;
+import com.buaa.yushijie.bookreader.Services.CurrentApplication;
 import com.buaa.yushijie.bookreader.Services.DownLoadBookInfoService;
 import com.buaa.yushijie.bookreader.Services.DownLoadMyBookShelfService;
-import com.buaa.yushijie.bookreader.Services.EncodeAndDecode;
 
-import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
 import bean.UserBean;
-import bean.UserCategory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -116,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 DownLoadBookInfoService service = new DownLoadBookInfoService();
                 user = service.getUserInfo(getIntent().getStringExtra(USERNAME));
-                CurrentUser cu = (CurrentUser)getApplication();
+                CurrentApplication cu = (CurrentApplication)getApplication();
                 cu.setUser(user);
                 //get category
                 try {

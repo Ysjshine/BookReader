@@ -16,12 +16,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.buaa.yushijie.bookreader.R;
-import com.buaa.yushijie.bookreader.Services.CurrentUser;
+import com.buaa.yushijie.bookreader.Services.CurrentApplication;
+import com.buaa.yushijie.bookreader.Services.DownLoadCommentService;
 import com.buaa.yushijie.bookreader.Services.SQLUpload;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
 import bean.BookBean;
+import bean.CommentBean;
 import bean.UserBean;
 
 /**
@@ -33,6 +36,7 @@ public class CommentDialogFragment extends DialogFragment {
     private BookBean currentBook;
     private Activity currentActivity;
 
+
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -42,6 +46,24 @@ public class CommentDialogFragment extends DialogFragment {
                     break;
                 case 1:
                     Toast.makeText(currentActivity,"发表成功",Toast.LENGTH_SHORT).show();
+                    CurrentApplication currentApplication = (CurrentApplication)currentActivity.getApplication();
+                    ArrayList<CommentBean> commentBeanArrayList = currentApplication.getCommentBeanArrayList();
+                    commentBeanArrayList.clear();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                DownLoadCommentService service = new DownLoadCommentService(currentBook);
+                                commentBeanArrayList.clear();
+                                commentBeanArrayList.addAll(service.getCommentInfo());
+                                currentApplication.getCurrentAdapter().notifyDataSetChanged();
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+
+
                     break;
                 case 2:
                     Toast.makeText(currentActivity,"网络连接超时",Toast.LENGTH_SHORT).show();
@@ -79,7 +101,7 @@ public class CommentDialogFragment extends DialogFragment {
         public void onClick(DialogInterface dialog, int which) {
             //send comment to server
             String comment = commentEditText.getText().toString();
-            UserBean ub = ((CurrentUser) currentActivity.getApplication()).getUser();
+            UserBean ub = ((CurrentApplication) currentActivity.getApplication()).getUser();
             if(!comment.equals("")) {
                 new Thread(new Runnable() {
                     @Override

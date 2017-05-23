@@ -1,9 +1,6 @@
 package com.buaa.yushijie.bookreader.Services;
 
-import android.app.Service;
 import android.util.Log;
-
-import com.buaa.yushijie.bookreader.JavaBean.Comment;
 
 import java.io.DataOutputStream;
 import java.io.ObjectInputStream;
@@ -13,7 +10,6 @@ import java.util.ArrayList;
 
 import bean.BookBean;
 import bean.CommentBean;
-import bean.UserBean;
 
 /**
  * Created by yushijie on 17-5-19.
