@@ -1,5 +1,6 @@
 package com.buaa.yushijie.bookreader.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -25,6 +26,7 @@ public class BookDetailActivity extends FragmentActivity {
     private CommentRecyclerFragment commentRecyclerFragment = new CommentRecyclerFragment();
     private final static String BOOKKEY="BOOKITEM";
     private static final String TAG = "comment";
+    private static final String GET_CURRENT_BOOK ="CurrentBook";
     private BookBean currentBook;
     private Button readBookButton;
     private Button collectBookButton;
@@ -71,7 +73,15 @@ public class BookDetailActivity extends FragmentActivity {
                 BookDetailCollectionRecycleDialogFragment dialogFragment = new BookDetailCollectionRecycleDialogFragment();
                 dialogFragment.setBookBean(currentBook);
                 dialogFragment.show(getSupportFragmentManager(),"Collect");
+            }
+        });
 
+        readBookButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(BookDetailActivity.this,BookReadingActivity.class);
+                i.putExtra(GET_CURRENT_BOOK,currentBook);
+                startActivity(i);
             }
         });
     }

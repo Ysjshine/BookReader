@@ -1,11 +1,13 @@
 package com.buaa.yushijie.bookreader.Fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +15,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.buaa.yushijie.bookreader.Activities.LoginActivity;
 import com.buaa.yushijie.bookreader.R;
 import com.buaa.yushijie.bookreader.Services.CurrentApplication;
 import com.buaa.yushijie.bookreader.Services.SQLUpload;
 
+import java.io.File;
 import java.util.concurrent.TimeoutException;
 
 import bean.UserBean;
@@ -37,6 +41,9 @@ public class AboutMeFragment extends Fragment {
     private Button mModifyNickNameButton;
     private Button mModifyPasswordButton;
     private Button mLoginOutButton;
+    private Button mClearCacheDirButton;
+
+    private Activity currentActivity;
 
     private Handler handler = new Handler(){
         @Override
@@ -46,23 +53,6 @@ public class AboutMeFragment extends Fragment {
         }
     };
 
-//    public void setUsername(String username) {
-//        this.username = username;
-//    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-//        //get user info thread
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                DownLoadBookInfoService service = new DownLoadBookInfoService();
-//                user = service.getUserInfo(username);
-//            }
-//        }).start();
-    }
 
     @Nullable
     @Override
@@ -73,10 +63,11 @@ public class AboutMeFragment extends Fragment {
         mModifyNickNameButton = (Button) v.findViewById(R.id.about_me_fragment_edit_nickname_button);
         mModifyPasswordButton = (Button)v.findViewById(R.id.about_me_change_password_button);
         mLoginOutButton = (Button)v.findViewById(R.id.about_me_login_out_button);
+        mClearCacheDirButton =(Button)v.findViewById(R.id.about_me_clear_cache_button);
 
-
+        currentActivity = getActivity();
         nicknameEditText.setInputType(InputType.TYPE_NULL);
-        user = ((CurrentApplication)getActivity().getApplication()).getUser();
+        user = ((CurrentApplication)currentActivity.getApplication()).getUser();
 
         usernameTextView.setText(user.account);
         nicknameEditText.setText(user.nickname);
@@ -132,11 +123,33 @@ public class AboutMeFragment extends Fragment {
         mLoginOutButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent logoutIntent = new Intent(getActivity(), LoginActivity.class);
+                Intent logoutIntent = new Intent(currentActivity, LoginActivity.class);
                 logoutIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(logoutIntent);
             }
         });
+
+        mClearCacheDirButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteCache(currentActivity.getCacheDir());
+                Toast.makeText(currentActivity,"清除缓存成功",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
         return v;
+    }
+
+    private void deleteCache(File file){
+        if(file == null) return;
+        if(file.isDirectory()){
+            File[] files = file.listFiles();
+            for(File f:files){
+                deleteCache(f);
+            }
+        }else{
+            file.delete();
+        }
     }
 }

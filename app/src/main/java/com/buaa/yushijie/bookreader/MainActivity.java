@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                             .replace(R.id.navigation_container,cityNavigationFragment)
                             .commit();
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.book_category_container,bookCategoryFragment)
+                            .replace(R.id.book_category_container,new BookCategoryFragment())
                             .commit();
                     return true;
                 case R.id.navigation_dashboard:

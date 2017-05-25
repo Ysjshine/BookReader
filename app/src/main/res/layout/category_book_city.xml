@@ -24,20 +24,13 @@
                 android:orientation="vertical"
                 android:weightSum="1">
 
-                <TextView
-                    android:id="@+id/textView"
-                    style="@style/MainTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="42dp"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                    tools:text="书城主页" />
-
                 <ImageView
                     android:id="@+id/imageView9"
                     android:layout_width="match_parent"
-                    android:layout_height="80sp"
+                    android:layout_height="100sp"
                     android:layout_weight="0.07"
-                    app:srcCompat="@android:drawable/button_onoff_indicator_off" />
+                    android:src="@mipmap/ad"
+                    android:scaleType="fitXY"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -114,7 +107,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="80sp"
+                    android:layout_height="120sp"
                     android:layout_marginLeft="10sp"
                     android:layout_marginRight="10sp"
                     android:layout_marginTop="20sp"
@@ -122,38 +115,17 @@
 
                     <ImageView
                         android:id="@+id/imageViewR1_1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginStart="20dp"
-                        app:srcCompat="@android:drawable/btn_star_big_on" />
+                        android:scaleType="fitXY"/>
 
-                    <TextView
-                        android:id="@+id/textViewR1_2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_above="@+id/imageViewR1_1"
-                        android:layout_marginLeft="47dp"
-                        android:layout_marginStart="47dp"
-                        android:layout_toEndOf="@+id/imageViewR1_1"
-                        android:layout_toRightOf="@+id/imageViewR1_1"
-                        android:text="Title" />
-
-                    <TextView
-                        android:id="@+id/textViewR1_3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/textViewR1_2"
-                        android:layout_alignStart="@+id/textViewR1_2"
-                        android:layout_below="@+id/imageViewR1_1"
-                        android:text="Summary" />
                 </RelativeLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="80sp"
+                    android:layout_height="120sp"
                     android:layout_marginLeft="10sp"
                     android:layout_marginRight="10sp"
                     android:layout_marginTop="20sp"
@@ -161,38 +133,17 @@
 
                     <ImageView
                         android:id="@+id/imageViewR2_1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginStart="20dp"
-                        app:srcCompat="@android:drawable/btn_star_big_on" />
+                        android:scaleType="fitXY"/>
 
-                    <TextView
-                        android:id="@+id/textViewR2_2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_above="@+id/imageViewR2_1"
-                        android:layout_marginLeft="47dp"
-                        android:layout_marginStart="47dp"
-                        android:layout_toEndOf="@+id/imageViewR2_1"
-                        android:layout_toRightOf="@+id/imageViewR2_1"
-                        android:text="Title" />
-
-                    <TextView
-                        android:id="@+id/textViewR2_3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/textViewR2_2"
-                        android:layout_alignStart="@+id/textViewR2_2"
-                        android:layout_below="@+id/imageViewR2_1"
-                        android:text="Summary" />
                 </RelativeLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="80sp"
+                    android:layout_height="120sp"
                     android:layout_marginLeft="10sp"
                     android:layout_marginRight="10sp"
                     android:layout_marginTop="20sp"
@@ -200,34 +151,13 @@
 
                     <ImageView
                         android:id="@+id/imageViewR3_1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginStart="20dp"
-                        app:srcCompat="@android:drawable/btn_star_big_on" />
+                        android:scaleType="fitXY"/>
 
-                    <TextView
-                        android:id="@+id/textViewR3_2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_above="@+id/imageViewR3_1"
-                        android:layout_marginLeft="47dp"
-                        android:layout_marginStart="47dp"
-                        android:layout_toEndOf="@+id/imageViewR3_1"
-                        android:layout_toRightOf="@+id/imageViewR3_1"
-                        android:text="Title" />
-
-                    <TextView
-                        android:id="@+id/textViewR3_3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/textViewR3_2"
-                        android:layout_alignStart="@+id/textViewR3_2"
-                        android:layout_below="@+id/imageViewR3_1"
-                        android:text="Summary" />
                 </RelativeLayout>
             </LinearLayout>
         </ScrollView>

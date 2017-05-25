@@ -57,8 +57,14 @@ public class BookFragment extends Fragment {
     private static final int SORT_BY_READ = 0;
     private static final int SORT_BY_COLLECT = 1;
 
-    //query string
+    //query string or id
     private String query;
+    private int categoryID;
+
+    public void setCategoryID(int categoryID) {
+        this.categoryID = categoryID;
+    }
+
     public void setQuery(String query) {
         this.query = query;
     }
@@ -101,7 +107,11 @@ public class BookFragment extends Fragment {
                 DownLoadBookInfoService service = new DownLoadBookInfoService();
                 List<BookBean> bookLists = null;
                 try {
-                    bookLists = service.getBookInfo(query);
+                    if(query !=null) {
+                        bookLists = service.getBookInfo(query);
+                    }else if(categoryID != -1){
+                        bookLists = service.getBookInfoByCategroyID(categoryID);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

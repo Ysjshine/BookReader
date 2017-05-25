@@ -58,4 +58,10 @@
         android:layout_height="wrap_content"
         android:text="注销登录"
         android:layout_marginTop="20sp"/>
+    <Button
+        android:id="@+id/about_me_clear_cache_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="清除缓存"
+        android:layout_marginTop="20sp"/>
 </LinearLayout>
