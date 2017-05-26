@@ -2,80 +2,95 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@mipmap/background">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="70sp"
-        android:layout_marginTop="150sp"
+        android:layout_marginTop="120sp"
         android:src="@mipmap/icon"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="30sp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="right"
             android:layout_weight="2"
-            android:textSize="15sp"
+            android:textSize="20sp"
             android:textStyle="bold"
+            android:textColor="#FFFFFF"
             android:text="用户名："/>
         <EditText
             android:id="@+id/username_edit_text_pwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:background="@drawable/input_text"
+            android:layout_weight="1"
+            android:layout_marginRight="20sp"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="10sp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="right"
             android:layout_weight="2"
-            android:textSize="15sp"
+            android:textSize="20sp"
             android:textStyle="bold"
+            android:textColor="#FFFFFF"
             android:text="密码："/>
         <EditText
             android:id="@+id/password_edit_text_pwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/input_text"
             android:layout_weight="1"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword"
+            android:layout_marginRight="20sp"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="10sp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="right"
             android:layout_weight="2"
-            android:textSize="15sp"
+            android:textSize="17sp"
             android:textStyle="bold"
+            android:textColor="#FFFFFF"
             android:text="再次输入密码："/>
         <EditText
             android:id="@+id/password_again_edit_text_pwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/input_text"
             android:layout_weight="1"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword"
+            android:layout_marginRight="20sp"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="10sp">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30sp"
             android:text="性别:"
-            android:textSize="15sp"
-            android:gravity="center"
+            android:textSize="20sp"
+            android:gravity="bottom|end"
+            android:textColor="#FFFFFF"
             android:layout_weight="2"
             android:textStyle="bold"/>
         <RadioGroup
@@ -88,6 +103,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="♂"
+                android:textColor="#FFFFFF"
                 android:textSize="30sp"
                 android:layout_weight="1"
                 android:checked="true"/>
@@ -96,6 +112,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textColor="#FFFFFF"
                 android:text="♀"
                 android:textSize="30sp"/>
         </RadioGroup>
@@ -103,8 +120,12 @@
     </LinearLayout>
     <Button
         android:id="@+id/register_button_pwd"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:layout_gravity="center"
+        android:background="@drawable/login_register_button"
+        android:layout_marginTop="20sp"
         android:text="注册"/>
 
 </LinearLayout>
