@@ -11,7 +11,6 @@
         android:id="@+id/book_datail_book_cover"
         android:layout_width="match_parent"
         android:layout_height="100sp"
-        android:src="@mipmap/cover"
         android:layout_weight="2"/>
 
     <LinearLayout

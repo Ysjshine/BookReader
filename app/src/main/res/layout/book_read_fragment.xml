@@ -3,9 +3,10 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <WebView
-        android:id="@+id/book_reading_webview"
+    <com.buaa.yushijie.bookreader.UI.MyWebView
+    android:id="@+id/book_reading_webview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </WebView>
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+    </com.buaa.yushijie.bookreader.UI.MyWebView>
 </LinearLayout>

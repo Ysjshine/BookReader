@@ -44,28 +44,28 @@
                         android:layout_width="85dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.07"
-                        app:srcCompat="@mipmap/ic_launcher1" />
+                        app:srcCompat="@mipmap/young" />
 
                     <ImageView
                         android:id="@+id/imageView2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.22"
-                        app:srcCompat="@mipmap/ic_launcher1" />
+                        app:srcCompat="@mipmap/socity" />
 
                     <ImageView
                         android:id="@+id/imageView3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.33"
-                        app:srcCompat="@mipmap/ic_launcher1" />
+                        app:srcCompat="@mipmap/history" />
 
                     <ImageView
                         android:id="@+id/imageView4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.31"
-                        app:srcCompat="@mipmap/ic_launcher1" />
+                        app:srcCompat="@mipmap/poem" />
 
                 </LinearLayout>
 
@@ -80,28 +80,28 @@
                         android:layout_width="85dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.07"
-                        app:srcCompat="@mipmap/ic_launcher1" />
+                        app:srcCompat="@mipmap/battle" />
 
                     <ImageView
                         android:id="@+id/imageView6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.22"
-                        app:srcCompat="@mipmap/ic_launcher1" />
+                        app:srcCompat="@mipmap/legend" />
 
                     <ImageView
                         android:id="@+id/imageView7"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.33"
-                        app:srcCompat="@mipmap/ic_launcher1" />
+                        app:srcCompat="@mipmap/wired" />
 
                     <ImageView
                         android:id="@+id/imageView8"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.31"
-                        app:srcCompat="@mipmap/ic_launcher1" />
+                        app:srcCompat="@mipmap/tech" />
 
                 </LinearLayout>
 
