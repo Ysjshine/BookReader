@@ -50,13 +50,6 @@ public class NavigationFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
             @Override
             public boolean onQueryTextSubmit(String query) {
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        SQLUpload.sendQueryString(query);
-//
-//                    }
-//                }).start();
                 Intent i = new Intent(getActivity(), BookListActivity.class);
                 i.putExtra(QUERY,query);
                 startActivity(i);

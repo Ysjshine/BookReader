@@ -36,6 +36,7 @@ public class SQLUpload {
     private static final String URL_SEND_DELETING_CATEGORY_INFO="http://120.25.89.166/BookReaderServer/DeleteCategory";
     private static final String URL_SEND_COLLECTION_INFO="http://120.25.89.166/BookReaderServer/CollectBook";
     private static final String URL_SEND_DELETE_COMMENT_INFO="http://120.25.89.166/BookReaderServer/DeleteComment";
+    private static final String URL_SEND_PROCESS_INFO="http://120.25.89.166/BookReaderServer/UpdatePos";
 
     private static HttpURLConnection conn = null;
     private static URL url = null;
@@ -135,7 +136,6 @@ public class SQLUpload {
         dos.writeBytes(info);
         dos.flush();
         dos.close();
-        //conn.getResponseCode();
         getReturnInfo(handler);
         if(conn!=null) conn.disconnect();
     }
@@ -182,4 +182,21 @@ public class SQLUpload {
         getReturnInfo(handler);
         if(conn!=null)conn.disconnect();
     }
+
+    //send the process of book
+    public static void sendProcessOfBook(UserBean userBean,BookBean bookBean,
+                                         int chapter,int page) throws Exception{
+        connectToServer(URL_SEND_PROCESS_INFO);
+        DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
+        String info = "uid="+userBean.UserID+"&"
+                +"bid="+bookBean.BookID+"&"
+                +"chapter="+chapter+"&"
+                +"page="+page;
+        dos.writeBytes(info);
+        dos.flush();
+        dos.close();
+        conn.getResponseCode();
+        if(conn!=null)conn.disconnect();
+    }
+
 }

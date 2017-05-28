@@ -17,6 +17,7 @@ import bean.BookBean;
 public class DownLoadIndexInfo {
     private static final String URL_GET_INDEX_INFO="http://120.25.89.166/BookReaderServer/QueryTopBook";
     private static final String URL_GET_RES_INFO="http://120.25.89.166/BookReaderServer/GetTopBookSrc";
+    private static final String URL_GET_NEWS_PIC_INFO="";
     private static final String TAG="DownLoadIndexInfo";
     HttpURLConnection conn = null;
     URL url = null;
@@ -37,11 +38,16 @@ public class DownLoadIndexInfo {
         }
         ois.close();
         Log.e(TAG, "getTop3Book: "+res.size());
+        if(conn!=null)conn.disconnect();
         return res;
     }
 
-    public ArrayList<String> getURL() throws Exception{
-        url = new URL(URL_GET_RES_INFO);
+    public ArrayList<String> getURL(boolean isNews) throws Exception{
+        if(!isNews) {
+            url = new URL(URL_GET_RES_INFO);
+        }else {
+            url = new URL(URL_GET_NEWS_PIC_INFO);
+        }
         conn = (HttpURLConnection)url.openConnection();
         conn.setRequestMethod("POST");
         conn.setDoInput(true);
@@ -57,6 +63,7 @@ public class DownLoadIndexInfo {
         }
         Log.e(TAG, "getTop3Book: "+res.size());
         ois.close();
+        if(conn!=null)conn.disconnect();
         return res;
     }
 }

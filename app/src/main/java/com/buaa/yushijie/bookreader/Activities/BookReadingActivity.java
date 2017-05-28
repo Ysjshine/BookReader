@@ -22,13 +22,11 @@ public class BookReadingActivity extends AppCompatActivity {
     private BookBean currentBook;
     private static final String GET_CURRENT_BOOK ="CurrentBook";
     private static final String TAG = "BookReadActivity";
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_reading_activity);
         currentBook =(BookBean) getIntent().getSerializableExtra(GET_CURRENT_BOOK);
-
         BookReadFragment bookReadFragment = new BookReadFragment();
         bookReadFragment.setCurrentBook(currentBook);
         getSupportFragmentManager().beginTransaction()

@@ -6,15 +6,17 @@
     android:background="@color/colorNavigationBackground">
     <Button
         android:id="@+id/head_navigation_back"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Back" />
+        android:background="@mipmap/back_arrow"
+        android:layout_weight="6"/>
 
     <SearchView
         android:id="@+id/head_navigation_search"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:iconifiedByDefault="false"
         android:focusable="false"
-        android:queryHint="search" />
+        android:layout_weight="1"
+        android:queryHint="Search" />
 </LinearLayout>

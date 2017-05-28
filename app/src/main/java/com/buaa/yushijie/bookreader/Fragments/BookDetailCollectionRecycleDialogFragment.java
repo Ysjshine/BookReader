@@ -45,7 +45,6 @@ public class BookDetailCollectionRecycleDialogFragment extends DialogFragment {
                     Toast.makeText(currentActivity,"添加成功",Toast.LENGTH_SHORT).show();
                     CurrentApplication cu = (CurrentApplication)currentActivity.getApplication();
                     ArrayList<ArrayList<BookBean>> b =  cu.getBookList();
-
                     b.get(selectedIndex).add(bookBean);
                     cu.getAdapter().notifyDataSetChanged();
                 }else if(msg.what == 2){

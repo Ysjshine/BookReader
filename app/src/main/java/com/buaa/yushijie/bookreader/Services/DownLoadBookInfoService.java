@@ -8,6 +8,7 @@ import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -19,6 +20,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
@@ -36,6 +38,7 @@ public class DownLoadBookInfoService {
     private static final String URL_GET_BOOK = "http://120.25.89.166/BookReaderServer/QueryBook?bookName=";
     private static final String URL_GET_USER_INFO="http://120.25.89.166/BookReaderServer/SendUserInfo?username=";
     private static final String URL_GET_BOOK_BY_CID = "http://120.25.89.166/BookReaderServer/QueryTypeBook?type=";
+    private static final String URL_GET_PROCESS_INFO="http://120.25.89.166/BookReaderServer/QueryPos";
 
     HttpURLConnection conn = null;
     URL url = null;
@@ -145,20 +148,43 @@ public class DownLoadBookInfoService {
 
     public Book getEPUBBook(String path, Context context) throws Exception{
         connectToServer(path);
+        String name = "book_"+path.substring(path.indexOf("id=")+3);
         BufferedInputStream bin = new BufferedInputStream(conn.getInputStream());
         byte[] buffer = new byte[2048];
-        File file = new File(context.getCacheDir(),"55.epub");
-        FileOutputStream fos= new FileOutputStream(file);
-        BufferedOutputStream bos = new BufferedOutputStream(fos);
-        int realReadNum=0;
-        while((realReadNum=bin.read(buffer))>=0){
-            bos.write(buffer,0,realReadNum);
-            Log.e( TAG, "getEPUBBook: "+"ok" );
+        File file = new File(context.getCacheDir(),name);
+        if(!file.exists()) {
+            FileOutputStream fos = new FileOutputStream(file);
+            BufferedOutputStream bos = new BufferedOutputStream(fos);
+            int realReadNum = 0;
+            while ((realReadNum = bin.read(buffer)) >= 0) {
+                bos.write(buffer, 0, realReadNum);
+                Log.e(TAG, "getEPUBBook: " + "ok");
+            }
+            bos.close();
         }
-        bos.close();
         bin.close();
         Book res = new EpubReader().readEpub(new FileInputStream(file));
         Log.e(TAG, "getEPUBBook: "+res.getTitle());
+        return res;
+    }
+
+    public ArrayList<Integer> getProcess(UserBean userBean,BookBean bookBean) throws Exception{
+        connectToServer(URL_GET_PROCESS_INFO);
+
+        DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
+        String info = "uid="+userBean.UserID+"&"
+                +"bid="+bookBean.BookID;
+        dos.writeBytes(info);
+        dos.flush();dos.close();
+        ObjectInputStream ois = new ObjectInputStream(conn.getInputStream());
+        Integer ans;
+        ArrayList<Integer> res = new ArrayList<>();
+        while((ans = (Integer) ois.readObject()) !=null){
+            res.add(ans);
+        }
+        ois.close();
+        Log.e(TAG, "getProcess: "+res.size() );
+        if(conn!=null)conn.disconnect();
         return res;
     }
 }

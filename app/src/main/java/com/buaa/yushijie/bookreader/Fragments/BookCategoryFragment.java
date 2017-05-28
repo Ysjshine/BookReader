@@ -1,7 +1,8 @@
 package com.buaa.yushijie.bookreader.Fragments;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,14 +12,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.ViewSwitcher;
 
 import com.buaa.yushijie.bookreader.Activities.BookDetailActivity;
 import com.buaa.yushijie.bookreader.Activities.BookListActivity;
 import com.buaa.yushijie.bookreader.R;
 import com.buaa.yushijie.bookreader.Services.AsynTaskLoadImg;
 import com.buaa.yushijie.bookreader.Services.DownLoadBookInfoService;
-import com.buaa.yushijie.bookreader.Services.DownLoadCommentService;
 import com.buaa.yushijie.bookreader.Services.DownLoadIndexInfo;
 
 import java.io.File;
@@ -48,21 +50,53 @@ public class BookCategoryFragment extends Fragment {
     private ImageView categoryView7;
     private ImageView categoryView8;
 
+    private ImageSwitcher newsImageSwitch;
+    private ArrayList<Uri> urisOfnewsImageSwitch;
+    private int selectedItem;
+
     private File cache;
     private static final String TAG="Index";
 
+    private Handler handler1 = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
+    };
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            DownLoadBookInfoService service = new DownLoadBookInfoService();
-            urlArrayList = (ArrayList<String>)msg.obj;
-            for (int i = 0; i < 3; i++) {
-                imageViewArrayList.get(i).setOnClickListener(new ImageClickListener());
-                AsynTaskLoadImg task = new AsynTaskLoadImg(service, imageViewArrayList.get(i), cache);
-                task.execute(urlArrayList.get(i));
+            if(msg.what == 1) {
+                DownLoadBookInfoService service = new DownLoadBookInfoService();
+                urlArrayList = (ArrayList<String>) msg.obj;
+                for (int i = 0; i < 3; i++) {
+                    imageViewArrayList.get(i).setOnClickListener(new ImageClickListener());
+                    AsynTaskLoadImg task = new AsynTaskLoadImg(service, imageViewArrayList.get(i), cache);
+                    task.execute(urlArrayList.get(i));
+                }
+            }else if(msg.what == 2){
+               urisOfnewsImageSwitch = (ArrayList<Uri>)msg.obj;
+                newsImageSwitch.setImageURI(urisOfnewsImageSwitch.get(0));
+                selectedItem = 0;
+                Runnable r = new Runnable(){
+                    @Override
+                    public void run() {
+                        if(selectedItem< urisOfnewsImageSwitch.size()-1){
+                            selectedItem++;
+                        }else{
+                            selectedItem = 0;
+                        }
+                        newsImageSwitch.setImageURI(urisOfnewsImageSwitch.get(selectedItem));
+                        Log.e(TAG, "run: "+"Call" );
+                        handler1.postDelayed(this,2000);
+                    }
+                };
+                handler1.post(r);
             }
         }
     };
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +138,21 @@ public class BookCategoryFragment extends Fragment {
         imageViewArrayList.add(imageView2);
         imageViewArrayList.add(imageView3);
 
+        Activity currentActivity = getActivity();
+        newsImageSwitch = (ImageSwitcher)v.findViewById(R.id.imageView_switcher);
+        newsImageSwitch.setFactory(new ViewSwitcher.ViewFactory() {
+            @Override
+            public View makeView() {
+                ImageView v = new ImageView(currentActivity);
+                v.setScaleType(ImageView.ScaleType.FIT_XY);
+                ViewGroup.LayoutParams params = new ImageSwitcher.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                v.setLayoutParams(params);
+                return v;
+            }
+        });
+        newsImageSwitch.setInAnimation(currentActivity,android.support.v7.appcompat.R.anim.abc_fade_in);
+        newsImageSwitch.setOutAnimation(currentActivity,android.support.v7.appcompat.R.anim.abc_fade_out);
 
         return v;
 
@@ -182,11 +231,23 @@ public class BookCategoryFragment extends Fragment {
             public void run() {
                 try{
                     DownLoadIndexInfo service = new DownLoadIndexInfo();
-                    urlArrayList = service.getURL();
+                    urlArrayList = service.getURL(false);
                     bookBeanArrayList = service.getTop3Book();
+                    //ArrayList<String> urlsNewsPic = service.getURL(true);
                     Message msg = new Message();
+                    msg.what  = 1;
                     msg.obj = urlArrayList;
                     handler.sendMessage(msg);
+
+                    ArrayList<Uri> uris = new ArrayList<>();
+                    for(int i =0;i<urlArrayList.size();i++) {
+                        Uri uri = new DownLoadBookInfoService().getImageURI(urlArrayList.get(i),cache);
+                        uris.add(uri);
+                    }
+                    Message msg1 = new Message();
+                    msg1.what  = 2;
+                    msg1.obj = uris;
+                    handler.sendMessage(msg1);
                 }catch (Exception e){
                     e.printStackTrace();
                 }

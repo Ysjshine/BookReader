@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,8 +34,6 @@ import bean.UserBean;
 
 public class AboutMeFragment extends Fragment {
     private UserBean user ;
-//    private String username;
-
     private static final String TAG = "DIALOG_CHANGE_PASSWORD";
     private TextView usernameTextView;
     private EditText nicknameEditText;
@@ -42,13 +41,15 @@ public class AboutMeFragment extends Fragment {
     private Button mModifyPasswordButton;
     private Button mLoginOutButton;
     private Button mClearCacheDirButton;
+    private Button mAboutTeamButton;
+    private ImageView imageViewPicture;
 
     private Activity currentActivity;
 
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            mModifyNickNameButton.setText("EDIT");
+            mModifyNickNameButton.setText("编辑");
             nicknameEditText.setInputType(InputType.TYPE_NULL);
         }
     };
@@ -78,7 +79,7 @@ public class AboutMeFragment extends Fragment {
             public void onClick(View v) {
                 if(nicknameEditText.getInputType() == InputType.TYPE_NULL){
                     nicknameEditText.setInputType(InputType.TYPE_CLASS_TEXT);
-                    mModifyNickNameButton.setText("save");
+                    mModifyNickNameButton.setText("保存");
                 }else{
                     String ans = nicknameEditText.getText().toString();
                     if(!ans.equals("")){
@@ -101,7 +102,7 @@ public class AboutMeFragment extends Fragment {
                     }else{
                         nicknameEditText.setText(user.nickname);
                     }
-                    mModifyNickNameButton.setText("EDIT");
+                    mModifyNickNameButton.setText("编辑");
                     nicknameEditText.setInputType(InputType.TYPE_NULL);
                 }
             }

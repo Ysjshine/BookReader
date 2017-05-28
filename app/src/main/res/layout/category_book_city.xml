@@ -23,14 +23,12 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:weightSum="1">
-
-                <ImageView
-                    android:id="@+id/imageView9"
+                <ImageSwitcher
+                    android:id="@+id/imageView_switcher"
                     android:layout_width="match_parent"
-                    android:layout_height="100sp"
-                    android:layout_weight="0.07"
-                    android:src="@mipmap/ad"
-                    android:scaleType="fitXY"/>
+                    android:layout_height="125sp"
+                    android:layout_weight="0.07" />
+
 
                 <LinearLayout
                     android:layout_width="match_parent"

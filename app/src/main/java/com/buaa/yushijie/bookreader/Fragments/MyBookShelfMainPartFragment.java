@@ -229,11 +229,17 @@ public class MyBookShelfMainPartFragment extends Fragment implements Serializabl
                         .inflate(R.layout.my_book_shelf_fragment_group_list,parent,false);
                 categoryHolder = new CategoryHolder();
                 categoryHolder.categoryName =(TextView) convertView.findViewById(R.id.my_book_shelf_group_list);
+                categoryHolder.arrow = (ImageView)convertView.findViewById(R.id.my_book_shelf_arrow);
                 convertView.setTag(categoryHolder);
             }else{
                 categoryHolder = (CategoryHolder)convertView.getTag();
             }
             categoryHolder.categoryName.setText(categoryGroupName.get(groupPosition).CategoryName);
+            if(isExpanded){
+                categoryHolder.arrow.setImageResource(R.mipmap.open);
+            }else {
+                categoryHolder.arrow.setImageResource(R.mipmap.close);
+            }
             return convertView;
         }
 
@@ -275,6 +281,7 @@ public class MyBookShelfMainPartFragment extends Fragment implements Serializabl
     }
     //Category
     private class CategoryHolder{
+        public ImageView arrow;
         public TextView categoryName;
     }
 

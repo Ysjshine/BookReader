@@ -7,4 +7,5 @@
     <color name="colorCategoryUpBackground">#CDCDB4</color>
     <color name="colorCatagoryDownBackground">#1E90FF</color>
     <color name="colorNavigationBackground">#E8E8E8</color>
+    <color name="colorOfMyBookShelfCategory">#FFFFFF</color>
 </resources>
