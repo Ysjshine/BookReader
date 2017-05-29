@@ -2,6 +2,7 @@ package com.buaa.yushijie.bookreader.Fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.buaa.yushijie.bookreader.Activities.AboutTeamInfoActivity;
 import com.buaa.yushijie.bookreader.Activities.LoginActivity;
 import com.buaa.yushijie.bookreader.R;
 import com.buaa.yushijie.bookreader.Services.CurrentApplication;
@@ -44,6 +46,10 @@ public class AboutMeFragment extends Fragment {
     private Button mAboutTeamButton;
     private ImageView imageViewPicture;
 
+    private SharedPreferences loginInfo;
+    private static final String PASSWORD_SAVE="Password";
+    private static final String USERNAME_SAVE="Username";
+
     private Activity currentActivity;
 
     private Handler handler = new Handler(){
@@ -65,7 +71,7 @@ public class AboutMeFragment extends Fragment {
         mModifyPasswordButton = (Button)v.findViewById(R.id.about_me_change_password_button);
         mLoginOutButton = (Button)v.findViewById(R.id.about_me_login_out_button);
         mClearCacheDirButton =(Button)v.findViewById(R.id.about_me_clear_cache_button);
-
+        mAboutTeamButton = (Button)v.findViewById(R.id.about_me_developer_team_button);
         currentActivity = getActivity();
         nicknameEditText.setInputType(InputType.TYPE_NULL);
         user = ((CurrentApplication)currentActivity.getApplication()).getUser();
@@ -90,9 +96,6 @@ public class AboutMeFragment extends Fragment {
                                 try{
                                     SQLUpload.senNewNickNameString(user,ans);
                                 }catch (Exception e){
-                                    if(e instanceof TimeoutException){
-                                        //connecting timeout;
-                                    }
                                     e.printStackTrace();
                                 }finally {
                                     handler.sendMessage(new Message());
@@ -124,6 +127,11 @@ public class AboutMeFragment extends Fragment {
         mLoginOutButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                loginInfo = currentActivity.getSharedPreferences("loginInfo",0);
+                SharedPreferences.Editor editor = loginInfo.edit();
+                editor.putString(USERNAME_SAVE,"");
+                editor.putString(PASSWORD_SAVE,"");
+                editor.commit();
                 Intent logoutIntent = new Intent(currentActivity, LoginActivity.class);
                 logoutIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(logoutIntent);
@@ -138,6 +146,13 @@ public class AboutMeFragment extends Fragment {
             }
         });
 
+        mAboutTeamButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(currentActivity, AboutTeamInfoActivity.class);
+                startActivity(intent);
+            }
+        });
 
         return v;
     }

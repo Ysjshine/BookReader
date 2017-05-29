@@ -75,7 +75,7 @@ public class BookCategoryFragment extends Fragment {
                     task.execute(urlArrayList.get(i));
                 }
             }else if(msg.what == 2){
-               urisOfnewsImageSwitch = (ArrayList<Uri>)msg.obj;
+                urisOfnewsImageSwitch = (ArrayList<Uri>)msg.obj;
                 newsImageSwitch.setImageURI(urisOfnewsImageSwitch.get(0));
                 selectedItem = 0;
                 Runnable r = new Runnable(){
@@ -232,15 +232,15 @@ public class BookCategoryFragment extends Fragment {
                     DownLoadIndexInfo service = new DownLoadIndexInfo();
                     urlArrayList = service.getURL(false);
                     bookBeanArrayList = service.getTop3Book();
-                    //ArrayList<String> urlsNewsPic = service.getURL(true);
+                    ArrayList<String> urlsNewsPic = service.getURL(true);
                     Message msg = new Message();
                     msg.what  = 1;
                     msg.obj = urlArrayList;
                     handler.sendMessage(msg);
 
                     ArrayList<Uri> uris = new ArrayList<>();
-                    for(int i =0;i<urlArrayList.size();i++) {
-                        Uri uri = new DownLoadBookInfoService().getImageURI(urlArrayList.get(i),cache);
+                    for(int i =0;i<urlsNewsPic.size();i++) {
+                        Uri uri = new DownLoadBookInfoService().getImageURI(urlsNewsPic.get(i),cache);
                         uris.add(uri);
                     }
                     Message msg1 = new Message();

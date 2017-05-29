@@ -1,6 +1,7 @@
 package com.buaa.yushijie.bookreader.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -40,6 +41,10 @@ public class LoginActivity extends AppCompatActivity {
     private Button mLoginButtton;
     private Button mRegisterButton;
 
+    private SharedPreferences loginInfo;
+    private static final String PASSWORD_SAVE="Password";
+    private static final String USERNAME_SAVE="Username";
+
     private static final String URL_LOGIN = "http://120.25.89.166/BookReaderServer/Login";
     private static final String TAG="LoginActivity";
     private static final String USERNAME="username";
@@ -61,8 +66,10 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     };
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        autoLogin();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
         mUsernameEditText = (EditText)findViewById(R.id.username_edit_text);
@@ -70,17 +77,20 @@ public class LoginActivity extends AppCompatActivity {
         mLoginButtton = (Button)findViewById(R.id.login_button);
         mRegisterButton = (Button)findViewById(R.id.register_button);
 
+
         mLoginButtton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                if(mUsernameEditText.getText().toString().equals("") || mPasswordEditText.getText().toString().equals("")){
+                String username = mUsernameEditText.getText().toString();
+                String password = mPasswordEditText.getText().toString();
+                if(username.equals("") || password.equals("")){
                         Toast.makeText(LoginActivity.this,"信息不完整",Toast.LENGTH_SHORT).show();
                     return;
                 }
                 t =  new Thread(new Runnable(){
                     @Override
                     public void run(){
-                        httpConnectionPost();
+                        httpConnectionPost(username,password);
                     }
                 });
                 t.start();
@@ -96,7 +106,21 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public void httpConnectionPost(){
+    //login automatically
+    private void autoLogin(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                loginInfo = getSharedPreferences("loginInfo",0);
+                String username = loginInfo.getString(USERNAME_SAVE,"");
+                String password = loginInfo.getString(PASSWORD_SAVE,"");
+                if(!(username.equals("")||password.equals(""))){
+                    httpConnectionPost(username,password);
+                }
+            }
+        }).start();
+    }
+    public void httpConnectionPost(String username,String password){
         HttpURLConnection conn = null;
         try {
             URL url = new URL(URL_LOGIN);
@@ -106,14 +130,12 @@ public class LoginActivity extends AppCompatActivity {
             conn.setDoOutput(true);
             conn.connect();
             DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
-            String content = "username="+EncodeAndDecode.encodeString( mUsernameEditText.getText().toString())+"&"
-                    +"password="+mPasswordEditText.getText().toString();
+            String content = "username="+EncodeAndDecode.encodeString(username)+"&"
+                    +"password="+password;
             dos.writeBytes(content);
-            dos.flush();
-            dos.close();
-            InputStream in = conn.getInputStream();
-            InputStreamReader inr = new InputStreamReader(in);
-            BufferedReader bf = new BufferedReader(inr);
+            dos.flush();dos.close();
+
+            BufferedReader bf = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             StringBuilder sb = new StringBuilder();
             String sa = null;
             while((sa  = bf.readLine())!=null){
@@ -121,21 +143,24 @@ public class LoginActivity extends AppCompatActivity {
             }
             Log.e(TAG, "httpConnectionPost: "+sb.toString() );
             if(sb.toString().equals("1")){
+                //save username and password
+                loginInfo = getSharedPreferences("loginInfo",0);
+                SharedPreferences.Editor editor = loginInfo.edit();
+                editor.putString(USERNAME_SAVE,username);
+                editor.putString(PASSWORD_SAVE,password);
+                editor.commit();
+                //jump to index
                 Intent login = new Intent(LoginActivity.this,MainActivity.class);
-                login.putExtra(USERNAME,mUsernameEditText.getText().toString());
+                login.putExtra(USERNAME,username);
+                Log.e(TAG, "httpConnectionPost: "+username );
                 login.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(login);
-            }
-            else {
+            } else {
                 Message msg = new Message();
                 msg.what = 0;
                 handler.sendMessage(msg);
             }
-            in.close();
-            inr.close();
             bf.close();
-
-
         }catch (Exception e){
             e.printStackTrace();
         }finally {

@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.buaa.yushijie.bookreader.R;
@@ -38,6 +39,7 @@ import nl.siegmann.epublib.domain.Book;
 
 public class BookReadFragment extends Fragment {
     private MyWebView mWebView;
+    private ProgressBar progressBar;
     private static final String TAG="BookReadFragment";
     private Activity currentActivity;
     private Context context;
@@ -63,6 +65,7 @@ public class BookReadFragment extends Fragment {
                 String content = (String)msg.obj;
                 try {
                     loadDataToWebView(content );
+                    progressBar.setVisibility(View.INVISIBLE);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -92,6 +95,8 @@ public class BookReadFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v =inflater.inflate(R.layout.book_read_fragment,container,false);
         mWebView = (MyWebView)v.findViewById(R.id.book_reading_webview);
+        progressBar = (ProgressBar)v.findViewById(R.id.load_progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
         initWebView();
         getBookData();
         return v;
@@ -166,6 +171,7 @@ public class BookReadFragment extends Fragment {
         mWebView.setBackgroundColor(Color.rgb(255,250,205));
         mWebView.getSettings().setDefaultFontSize(18);
         mWebView.getSettings().setSerifFontFamily("微软雅黑");
+        progressBar.setBackgroundColor(Color.rgb(255,250,205));
 
     }
 
@@ -309,6 +315,7 @@ public class BookReadFragment extends Fragment {
     }
 
     private void getChapterContent(){
+        progressBar.setVisibility(View.VISIBLE);
         new Thread(new Runnable() {
             @Override
             public void run() {

@@ -16,8 +16,8 @@ import bean.BookBean;
 
 public class DownLoadIndexInfo {
     private static final String URL_GET_INDEX_INFO="http://120.25.89.166/BookReaderServer/QueryTopBook";
-    private static final String URL_GET_RES_INFO="http://120.25.89.166/BookReaderServer/GetTopBookSrc";
-    private static final String URL_GET_NEWS_PIC_INFO="";
+    private static final String URL_GET_RES_INFO="http://120.25.89.166/BookReaderServer/GetTopImageSrc";
+    private static final String URL_GET_NEWS_PIC_INFO="http://120.25.89.166/BookReaderServer/GetNewsImageSrc";
     private static final String TAG="DownLoadIndexInfo";
     HttpURLConnection conn = null;
     URL url = null;

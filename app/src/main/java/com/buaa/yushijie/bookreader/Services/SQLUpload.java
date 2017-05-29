@@ -29,13 +29,13 @@ import bean.UserCategory;
 public class SQLUpload {
 
     private static final String URL_SEND_CATEGORY = "http://120.25.89.166/BookReaderServer/AddCategory";
-    private static final String URL_SEND_NEW_NICKNAME="http://120.25.89.166/BookReaderServer/UserInfo";
-    private static final String URL_SEND_NEW_PASSWORD="http://120.25.89.166/BookReaderServer/UserInfo";
+    private static final String URL_SEND_NEW_NICKNAME="http://120.25.89.166/BookReaderServer/UpdateUserInfo";
+    private static final String URL_SEND_NEW_PASSWORD="http://120.25.89.166/BookReaderServer/UpdateUserInfo";
     private static final String URL_SEND_COMMENT="http://120.25.89.166/BookReaderServer/AddComment";
-    private static final String URL_SEND_DELETING_BOOK_INFO="http://120.25.89.166/BookReaderServer/UnCollectBook";
-    private static final String URL_SEND_DELETING_CATEGORY_INFO="http://120.25.89.166/BookReaderServer/DeleteCategory";
-    private static final String URL_SEND_COLLECTION_INFO="http://120.25.89.166/BookReaderServer/CollectBook";
-    private static final String URL_SEND_DELETE_COMMENT_INFO="http://120.25.89.166/BookReaderServer/DeleteComment";
+    private static final String URL_SEND_DELETING_BOOK_INFO="http://120.25.89.166/BookReaderServer/DelCategoryBook";
+    private static final String URL_SEND_DELETING_CATEGORY_INFO="http://120.25.89.166/BookReaderServer/DelCategory";
+    private static final String URL_SEND_COLLECTION_INFO="http://120.25.89.166/BookReaderServer/AddCategoryBook";
+    private static final String URL_SEND_DELETE_COMMENT_INFO="http://120.25.89.166/BookReaderServer/DelComment";
     private static final String URL_SEND_PROCESS_INFO="http://120.25.89.166/BookReaderServer/UpdatePos";
 
     private static HttpURLConnection conn = null;

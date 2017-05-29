@@ -41,7 +41,7 @@ public class DownLoadBookInfoService {
     private static final String URL_GET_USER_INFO="http://120.25.89.166/BookReaderServer/SendUserInfo?username=";
     private static final String URL_GET_BOOK_BY_CID = "http://120.25.89.166/BookReaderServer/QueryTypeBook?type=";
     private static final String URL_GET_PROCESS_INFO="http://120.25.89.166/BookReaderServer/QueryPos";
-    private static final String URL_GET_BOOK_BY_CHPTER="http://120.25.89.166/BookReaderServer/DownloadChapter";
+    private static final String URL_GET_BOOK_BY_CHPTER="http://120.25.89.166/BookReaderServer/Chapter";
 
     HttpURLConnection conn = null;
     URL url = null;

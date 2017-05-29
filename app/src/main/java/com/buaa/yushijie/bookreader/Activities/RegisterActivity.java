@@ -50,6 +50,9 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.makeText(RegisterActivity.this, "用户名已存在", Toast.LENGTH_SHORT).show();
             }else if(msg.what == 2){
                 Toast.makeText(RegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
+                mUsername.setText("");
+                mPassword.setText("");
+                mPasswordAgain.setText("");
             }
         }
     };
@@ -77,8 +80,7 @@ public class RegisterActivity extends AppCompatActivity {
                     mPasswordAgain.setText("");
                 }else if(mPassword.getText().toString().length()<6){
                     Toast.makeText(RegisterActivity.this,"密码长度不得少于六位",Toast.LENGTH_SHORT).show();
-                }
-                else{
+                }  else{
                     if(mMale.isChecked()){
                         gender = "0";
                     }else if(mFemale.isChecked()){
@@ -112,11 +114,8 @@ public class RegisterActivity extends AppCompatActivity {
                     +"gender="+gender;
 
             dos.writeBytes(content);
-            dos.flush();
-            dos.close();
-            InputStream in = conn.getInputStream();
-            InputStreamReader inr = new InputStreamReader(in);
-            BufferedReader bf = new BufferedReader(inr);
+            dos.flush();dos.close();
+            BufferedReader bf = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             StringBuilder sb = new StringBuilder();
             String sa = null;
             while((sa  = bf.readLine())!=null){
@@ -127,13 +126,10 @@ public class RegisterActivity extends AppCompatActivity {
             if(sb.toString().equals("1")){
                 msg.what = 2;
                 handler.sendMessage(msg);
-            }
-            else {
+            } else {
                 msg.what = 1;
                 handler.sendMessage(msg);
             }
-            in.close();
-            inr.close();
             bf.close();
 
         }catch (Exception e){

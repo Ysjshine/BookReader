@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                             .replace(R.id.navigation_container,bookshelfNavigationFragment)
                             .commit();
                     FragmentManager fm1 = getSupportFragmentManager();
-                    fm1.beginTransaction().replace(R.id.book_category_container,myBookShelfMainPartFragment).commit();
+                    fm1.beginTransaction().replace(R.id.book_category_container,new MyBookShelfMainPartFragment()).commit();
                     return true;
                 case R.id.navigation_notifications:
                     getSupportFragmentManager().beginTransaction().replace(R.id.navigation_container,aboutMeNavigationFragment)
@@ -80,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
         myBookShelfMainPartFragment = new MyBookShelfMainPartFragment();
         aboutMeFragment = new AboutMeFragment();
         aboutMeNavigationFragment = new AboutMeNavigationFragment();
-
         //get data
         getNecessaryData();
 
@@ -112,9 +111,6 @@ public class MainActivity extends AppCompatActivity {
                     UserBean ub = cu.getUser();
                     cu.setUserCategories(services.getCategoryNameList(ub.account));
                 }catch (Exception e){
-                    if(e instanceof TimeoutException){
-                        //timeout
-                    }
                     e.printStackTrace();
                 }
             }
