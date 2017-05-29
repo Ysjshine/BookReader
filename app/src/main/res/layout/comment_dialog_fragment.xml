@@ -7,7 +7,7 @@
         android:id="@+id/comment_dialog_fragment_edit_text_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/border"
+        android:background="@drawable/picture_border"
         android:hint="写点什么吧..."
         android:maxLines="2"/>
 </LinearLayout>

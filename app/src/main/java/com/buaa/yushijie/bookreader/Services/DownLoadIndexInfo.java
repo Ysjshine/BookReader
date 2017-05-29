@@ -61,7 +61,7 @@ public class DownLoadIndexInfo {
         while((s=(String)ois.readObject()) != null){
             res.add(s);
         }
-        Log.e(TAG, "getTop3Book: "+res.size());
+        Log.e(TAG, "getURL: "+res.size() );
         ois.close();
         if(conn!=null)conn.disconnect();
         return res;

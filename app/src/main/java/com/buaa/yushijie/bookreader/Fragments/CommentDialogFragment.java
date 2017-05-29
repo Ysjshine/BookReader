@@ -46,28 +46,16 @@ public class CommentDialogFragment extends DialogFragment {
                     break;
                 case 1:
                     Toast.makeText(currentActivity,"发表成功",Toast.LENGTH_SHORT).show();
-                    CurrentApplication currentApplication = (CurrentApplication)currentActivity.getApplication();
-                    ArrayList<CommentBean> commentBeanArrayList = currentApplication.getCommentBeanArrayList();
-                    commentBeanArrayList.clear();
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                DownLoadCommentService service = new DownLoadCommentService(currentBook);
-                                commentBeanArrayList.clear();
-                                commentBeanArrayList.addAll(service.getCommentInfo());
-                                currentApplication.getCurrentAdapter().notifyDataSetChanged();
-                            }catch (Exception e){
-                                e.printStackTrace();
-                            }
-                        }
-                    }).start();
-
-
                     break;
                 case 2:
                     Toast.makeText(currentActivity,"网络连接超时",Toast.LENGTH_SHORT).show();
                     break;
+                case 3:
+                    CurrentApplication currentApplication = (CurrentApplication)currentActivity.getApplication();
+                    ArrayList<CommentBean> commentBeanArrayList = currentApplication.getCommentBeanArrayList();
+                    commentBeanArrayList.clear();
+                    commentBeanArrayList.addAll((ArrayList<CommentBean>)msg.obj);
+                    currentApplication.getCurrentAdapter().notifyDataSetChanged();
             }
         }
     };
@@ -107,7 +95,13 @@ public class CommentDialogFragment extends DialogFragment {
                     @Override
                     public void run() {
                         try {
-                            SQLUpload.sendComment(ub,currentBook,comment,handler);
+                            boolean flag = SQLUpload.sendComment(ub,currentBook,comment,handler);
+                            if(flag){
+                                Message msg = new Message();
+                                msg.obj = new DownLoadCommentService(currentBook).getCommentInfo();
+                                msg.what = 3;
+                                handler.sendMessage(msg);
+                            }
                         } catch (Exception e) {
                             if (e instanceof TimeoutException) {
                                 //timeout

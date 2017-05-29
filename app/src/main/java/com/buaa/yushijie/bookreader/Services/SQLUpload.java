@@ -95,7 +95,7 @@ public class SQLUpload {
     }
 
     //send comment
-    public static void sendComment(UserBean ub,BookBean bookBean,String comment,Handler handler) throws Exception{
+    public static boolean sendComment(UserBean ub,BookBean bookBean,String comment,Handler handler) throws Exception{
         connectToServer(URL_SEND_COMMENT);
         DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
         String info = "uid="+ub.UserID+"&"
@@ -104,11 +104,12 @@ public class SQLUpload {
         dos.writeBytes(info);
         dos.flush();
         dos.close();
-        getReturnInfo(handler);
+        boolean res = getReturnInfo(handler);
         if(conn!=null)conn.disconnect();
+        return res;
     }
 
-    private static void getReturnInfo(Handler handler) throws Exception{
+    private static boolean getReturnInfo(Handler handler) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
         StringBuilder sb = new StringBuilder();
         String stp;
@@ -119,10 +120,12 @@ public class SQLUpload {
             Message msg = new Message();
             msg.what = 1;
             handler.sendMessage(msg);
+            return true;
         }else{
             Message msg = new Message();
             msg.what = 0;
             handler.sendMessage(msg);
+            return false;
         }
     }
     //send deleting book info
@@ -170,7 +173,7 @@ public class SQLUpload {
     }
 
     //delete a comment
-    public static void sendDeleteCommentInfo(UserBean userBean, CommentBean commentBean,
+    public static boolean sendDeleteCommentInfo(UserBean userBean, CommentBean commentBean,
                                              Handler handler) throws Exception{
         connectToServer(URL_SEND_DELETE_COMMENT_INFO);
         DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
@@ -179,8 +182,9 @@ public class SQLUpload {
         dos.writeBytes(info);
         dos.flush();
         dos.close();
-        getReturnInfo(handler);
+        boolean res = getReturnInfo(handler);
         if(conn!=null)conn.disconnect();
+        return res;
     }
 
     //send the process of book

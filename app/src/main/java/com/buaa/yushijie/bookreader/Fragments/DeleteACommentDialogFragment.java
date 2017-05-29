@@ -2,6 +2,7 @@ package com.buaa.yushijie.bookreader.Fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,26 +47,17 @@ public class DeleteACommentDialogFragment extends DialogFragment {
                     break;
                 case 1:
                     Toast.makeText(currentActivity,"删除成功",Toast.LENGTH_SHORT).show();
-                    CurrentApplication currentApplication = (CurrentApplication)currentActivity.getApplication();
-                    ArrayList<CommentBean> commentBeanArrayList = currentApplication.getCommentBeanArrayList();
-                    commentBeanArrayList.clear();
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                DownLoadCommentService service = new DownLoadCommentService(currentBook);
-                                commentBeanArrayList.clear();
-                                commentBeanArrayList.addAll(service.getCommentInfo());
-                                currentApplication.getCurrentAdapter().notifyDataSetChanged();
-                            }catch (Exception e){
-                                e.printStackTrace();
-                            }
-                        }
-                    }).start();
                     break;
                 case 2:
                     Toast.makeText(currentActivity,"网络连接超时",Toast.LENGTH_SHORT).show();
                     break;
+                case 3:
+                    CurrentApplication currentApplication = (CurrentApplication)currentActivity.getApplication();
+                    ArrayList<CommentBean> commentBeanArrayList = currentApplication.getCommentBeanArrayList();
+                    commentBeanArrayList.clear();
+                    commentBeanArrayList.addAll((ArrayList<CommentBean>)msg.obj);
+                    currentApplication.getCurrentAdapter().notifyDataSetChanged();
+
             }
         }
     };
@@ -95,7 +87,13 @@ public class DeleteACommentDialogFragment extends DialogFragment {
                 @Override
                 public void run() {
                     try{
-                        SQLUpload.sendDeleteCommentInfo(userBean,commentBean,handler);
+                        boolean flag = SQLUpload.sendDeleteCommentInfo(userBean,commentBean,handler);
+                        if(flag){
+                            Message msg = new Message();
+                            msg.obj = new DownLoadCommentService(currentBook).getCommentInfo();
+                            msg.what = 3;
+                            handler.sendMessage(msg);
+                        }
                     }catch (Exception e){
                         if(e instanceof ConnectException){
                             Message msg = new Message();

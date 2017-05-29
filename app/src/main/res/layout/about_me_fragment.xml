@@ -10,19 +10,21 @@
         android:layout_marginTop="30sp"
         android:layout_width="100sp"
         android:layout_height="100sp"
-        android:src="@mipmap/ad"
+        android:src="@mipmap/icon"
         android:layout_gravity="center"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="10sp">
+        android:layout_marginTop="10sp"
+        android:layout_marginLeft="20sp"
+        android:layout_marginRight="20sp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="用户名:"
             android:textColor="#000000"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:layout_weight="3"/>
         <TextView
             android:id="@+id/about_me_fragment_username_text"
@@ -30,20 +32,23 @@
             android:layout_height="40sp"
             android:gravity="left|center"
             android:layout_weight="1"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:background="@drawable/border"/>
     </LinearLayout>
     
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="4sp">
+        android:layout_marginTop="4sp"
+        android:layout_marginLeft="20sp"
+        android:layout_marginRight="20sp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="3"
             android:textColor="#000000"
-            android:text="昵称:"
+            android:text="昵    称:"
             android:textSize="20sp" />
         <EditText
             android:id="@+id/about_me_fragment_nickname_text"
@@ -56,8 +61,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="3"
+            android:layout_marginLeft="5sp"
+            android:layout_marginRight="5sp"
             android:background="@drawable/border"
-            android:text="edit"/>
+            android:text="编辑"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

@@ -87,7 +87,6 @@ public class BookCategoryFragment extends Fragment {
                             selectedItem = 0;
                         }
                         newsImageSwitch.setImageURI(urisOfnewsImageSwitch.get(selectedItem));
-                        Log.e(TAG, "run: "+"Call" );
                         handler1.postDelayed(this,2000);
                     }
                 };

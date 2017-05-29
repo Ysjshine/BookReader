@@ -33,7 +33,7 @@ public class BookListActivity extends FragmentActivity {
         categoryID = getIntent().getIntExtra(CATEGORY_ID,-1);
         FragmentManager fm = getSupportFragmentManager();
         BookListNavigationFragment fragment = new BookListNavigationFragment();
-        fragment.setText(dict[categoryID]);
+        if(categoryID>=1) fragment.setText(dict[categoryID]);
         fm.beginTransaction()
                 .add(R.id.navigation_container_book_list,fragment)
                 .commit();
@@ -53,6 +53,6 @@ public class BookListActivity extends FragmentActivity {
         dict[5] = "军事战争";
         dict[6] = "玄幻修真";
         dict[7] = "恐怖灵异";
-        dict[8] = "工程技术";
+        dict[8] = "科幻穿越";
     }
 }

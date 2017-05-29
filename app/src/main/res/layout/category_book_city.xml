@@ -109,7 +109,7 @@
                     android:layout_marginLeft="10sp"
                     android:layout_marginRight="10sp"
                     android:layout_marginTop="20sp"
-                    android:background="@drawable/border">
+                    android:background="@drawable/picture_border">
 
                     <ImageView
                         android:id="@+id/imageViewR1_1"
@@ -127,7 +127,7 @@
                     android:layout_marginLeft="10sp"
                     android:layout_marginRight="10sp"
                     android:layout_marginTop="20sp"
-                    android:background="@drawable/border">
+                    android:background="@drawable/picture_border">
 
                     <ImageView
                         android:id="@+id/imageViewR2_1"
@@ -145,7 +145,7 @@
                     android:layout_marginLeft="10sp"
                     android:layout_marginRight="10sp"
                     android:layout_marginTop="20sp"
-                    android:background="@drawable/border">
+                    android:background="@drawable/picture_border">
 
                     <ImageView
                         android:id="@+id/imageViewR3_1"

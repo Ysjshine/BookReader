@@ -1,7 +1,6 @@
 package com.buaa.yushijie.bookreader.Fragments;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,24 +10,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.webkit.JavascriptInterface;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
-import android.widget.ViewFlipper;
 
-import com.buaa.yushijie.bookreader.Activities.BookReadingActivity;
 import com.buaa.yushijie.bookreader.R;
 import com.buaa.yushijie.bookreader.Services.CurrentApplication;
 import com.buaa.yushijie.bookreader.Services.DownLoadBookInfoService;
@@ -36,8 +26,7 @@ import com.buaa.yushijie.bookreader.Services.SQLUpload;
 import com.buaa.yushijie.bookreader.UI.MyWebView;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 import bean.BookBean;
 import bean.UserBean;
@@ -52,12 +41,12 @@ public class BookReadFragment extends Fragment {
     private static final String TAG="BookReadFragment";
     private Activity currentActivity;
     private Context context;
-    private Book books;
     private GestureDetector gesture = null;
 
     private BookBean currentBook;
     private int currentChapter =0 ;
     private int currentPage =0;
+    private int currentBookSize;
 
     private static final int NEXT=1;
     private static final int PREV=-1;
@@ -71,9 +60,9 @@ public class BookReadFragment extends Fragment {
         @Override
         public void handleMessage(Message msg) {
             if(msg.what == 0) {
-                books = (Book) msg.obj;
+                String content = (String)msg.obj;
                 try {
-                    loadDataToWebView();
+                    loadDataToWebView(content );
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -81,6 +70,8 @@ public class BookReadFragment extends Fragment {
                 ArrayList<Integer> process = (ArrayList<Integer>)msg.obj;
                 currentChapter = process.get(0);
                 currentPage = process.get(1);
+                currentBookSize = process.get(2);
+                Log.e(TAG, "handleMessage: "+currentBookSize );
             }
         }
     };
@@ -130,26 +121,23 @@ public class BookReadFragment extends Fragment {
                 CurrentApplication currentApplication = (CurrentApplication)currentActivity.getApplication();
                 UserBean user = currentApplication.getUser();
                 DownLoadBookInfoService service = new DownLoadBookInfoService();
+                ArrayList<Integer> process = null;
                 try{
-                    ArrayList<Integer> process =service.getProcess(user,currentBook);
+                    process =service.getProcess(user,currentBook);
                     Message msg = new Message();
                     msg.what = 1;
                     msg.obj = process;
                     handler.sendMessage(msg);
+
+                    String content = service.getEpubBookByChapter(currentBook,process.get(0));
+                    Message msg1 = new Message();
+                    msg1.obj = content;
+                    msg1.what = 0;
+                    handler.sendMessage(msg1);
                 }catch (Exception e){
                     e.printStackTrace();
                 }
 
-                try {
-
-                    Book book = service.getEPUBBook(currentBook.fileSource,currentActivity);
-                    Message msg = new Message();
-                    msg.obj = book;
-                    msg.what = 0;
-                    handler.sendMessage(msg);
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
             }
         }).start();
     }
@@ -182,9 +170,9 @@ public class BookReadFragment extends Fragment {
     }
 
     //load data
-    private void loadDataToWebView() throws Exception{
-        String text = new String(books.getContents().get(currentChapter).getData(),"UTF-8");
-        mWebView.loadData(text,"text/html;charset=UTF-8",null);
+    private void loadDataToWebView(String content) throws Exception{
+        //String text = new String(books.getContents().get(currentChapter).getData(),"UTF-8");
+        mWebView.loadData(content,"text/html;charset=UTF-8",null);
 
     }
 
@@ -195,7 +183,7 @@ public class BookReadFragment extends Fragment {
                 "var ourH = window.innerHeight; " +
                 "var ourW = window.innerWidth; " +
                 "var fullH = d.offsetHeight; " +
-                "var pageCount = Math.floor(fullH/ourH)+1;" +
+                "var pageCount = Math.floor(fullH/ourH)+2;" +
                 "var newW = pageCount*ourW; " +
                 "d.style.height = (ourH-50)+'px';" +
                 "d.style.width = newW+'px';" +
@@ -235,7 +223,7 @@ public class BookReadFragment extends Fragment {
     private void goToNextOrBackPage(WebView view,int pos) {
         String javascriptCode = "javascript:function nextPage() { " +
                 "var d = document.getElementsByTagName('body')[0];" +
-                "var ourW = window.innerWidth+1; " +
+                "var ourW = window.innerWidth; " +
                 "window.scrollBy("+pos+"*ourW,0)"+
                 "}";
         view.loadUrl(javascriptCode);
@@ -283,7 +271,7 @@ public class BookReadFragment extends Fragment {
             currentPage++;
             goToNextOrBackPage(mWebView,NEXT);
         }else if(currentPage==pageCount){
-            if(currentChapter+1==books.getContents().size()){
+            if(currentChapter+1==currentBookSize){
                 Toast.makeText(currentActivity,"已经看完了哦！",Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -292,7 +280,7 @@ public class BookReadFragment extends Fragment {
             htmlWidth = 0;
             pageCount = 0;
             try {
-                loadDataToWebView();
+                getChapterContent();
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -304,7 +292,7 @@ public class BookReadFragment extends Fragment {
             currentPage--;
             goToNextOrBackPage(mWebView,PREV);
         }else if(currentPage == 1){
-            if(currentChapter == 0){
+            if(currentChapter == 2){
                 Toast.makeText(currentActivity,"已经在最前面了哦！",Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -313,13 +301,30 @@ public class BookReadFragment extends Fragment {
             pageCount = 0;
             isBackFlag = true;
             try{
-                loadDataToWebView();
+                getChapterContent();
             }catch (Exception e){
                 e.printStackTrace();
             }
         }
     }
 
+    private void getChapterContent(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                DownLoadBookInfoService service = new DownLoadBookInfoService();
+                try {
+                    String content = service.getEpubBookByChapter(currentBook, currentChapter);
+                    Message msg = new Message();
+                    msg.what = 0 ;
+                    msg.obj = content;
+                    handler.sendMessage(msg);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
 
 }
 

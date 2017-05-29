@@ -8,12 +8,14 @@ import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilterInputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
@@ -39,6 +41,7 @@ public class DownLoadBookInfoService {
     private static final String URL_GET_USER_INFO="http://120.25.89.166/BookReaderServer/SendUserInfo?username=";
     private static final String URL_GET_BOOK_BY_CID = "http://120.25.89.166/BookReaderServer/QueryTypeBook?type=";
     private static final String URL_GET_PROCESS_INFO="http://120.25.89.166/BookReaderServer/QueryPos";
+    private static final String URL_GET_BOOK_BY_CHPTER="http://120.25.89.166/BookReaderServer/DownloadChapter";
 
     HttpURLConnection conn = null;
     URL url = null;
@@ -150,7 +153,7 @@ public class DownLoadBookInfoService {
         connectToServer(path);
         String name = "book_"+path.substring(path.indexOf("id=")+3);
         BufferedInputStream bin = new BufferedInputStream(conn.getInputStream());
-        byte[] buffer = new byte[2048];
+        byte[] buffer = new byte[1024*1024];
         File file = new File(context.getCacheDir(),name);
         if(!file.exists()) {
             FileOutputStream fos = new FileOutputStream(file);
@@ -163,7 +166,7 @@ public class DownLoadBookInfoService {
             bos.close();
         }
         bin.close();
-        Book res = new EpubReader().readEpub(new FileInputStream(file));
+         Book res = new EpubReader().readEpub(new FileInputStream(file));
         Log.e(TAG, "getEPUBBook: "+res.getTitle());
         return res;
     }
@@ -187,4 +190,23 @@ public class DownLoadBookInfoService {
         if(conn!=null)conn.disconnect();
         return res;
     }
+
+    public String getEpubBookByChapter(BookBean book,int chapter) throws Exception{
+        connectToServer(URL_GET_BOOK_BY_CHPTER);
+        DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
+        String info = "bid="+book.BookID+"&"
+                +"chapter="+chapter;
+        dos.writeBytes(info);
+        dos.flush();dos.close();
+        BufferedReader bf = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        StringBuilder sb = new StringBuilder();
+        String sa = null;
+        while((sa  = bf.readLine())!=null){
+            sb.append(sa);
+        }
+        bf.close();
+        if(conn!=null)conn.disconnect();
+        return sb.toString();
+    }
+
 }

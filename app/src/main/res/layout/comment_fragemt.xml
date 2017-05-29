@@ -2,19 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="10sp">
+    android:layout_marginLeft="20sp"
+    android:layout_marginRight="20sp"
+    android:layout_marginTop="5sp"
+    android:background="@drawable/border">
     <TextView
         android:id="@+id/comment_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="忽如远行客："
-        android:textStyle="bold"
-        android:textSize="25sp"/>
+        android:textColor="#000000"
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/comment_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="      我觉得这本书写得还可以，值得一看，获益颇多，受益匪浅"
-        android:textSize="20sp" />
+        android:textSize="15sp" />
 </LinearLayout>

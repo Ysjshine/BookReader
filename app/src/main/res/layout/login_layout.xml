@@ -30,6 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/input_text"
+            android:textColor="#FFFFFF"
             android:layout_weight="1" />
     </LinearLayout>
     <LinearLayout
@@ -53,6 +54,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/input_text"
             android:layout_weight="1"
+            android:textColor="#FFFFFF"
             android:inputType="textPassword" />
     </LinearLayout>
     <LinearLayout

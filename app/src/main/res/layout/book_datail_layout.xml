@@ -24,26 +24,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/book_detail_button"
             android:text="阅读"/>
         <Button
             android:id="@+id/book_detail_collection_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/book_detail_button"
             android:text="收藏"/>
         <Button
             android:id="@+id/book_detail_comment_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/book_detail_button"
             android:text="写评论"/>
     </LinearLayout>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="最新评论"
-        android:textSize="30sp"
-        android:background="#FFE7BA"/>
+        android:layout_marginLeft="20sp"
+        android:layout_marginRight="20sp"
+        android:text="评论列表"
+        android:textSize="20sp" />
     <FrameLayout
         android:id="@+id/comment_recyle_list"
         android:layout_width="match_parent"

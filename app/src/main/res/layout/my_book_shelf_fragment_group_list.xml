@@ -16,7 +16,7 @@
             android:id="@+id/my_book_shelf_group_list"
             android:layout_width="match_parent"
             android:layout_height="45sp"
-            android:textSize="30sp"
+            android:textSize="18sp"
             android:gravity="left|center"
             android:background="@drawable/textview_border" />
     </LinearLayout>
