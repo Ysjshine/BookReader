@@ -189,7 +189,7 @@ public class BookReadFragment extends Fragment {
                 "var ourH = window.innerHeight; " +
                 "var ourW = window.innerWidth; " +
                 "var fullH = d.offsetHeight; " +
-                "var pageCount = Math.floor(fullH/ourH)+2;" +
+                "var pageCount = Math.floor(fullH/(ourH-50))+1;" +
                 "var newW = pageCount*ourW; " +
                 "d.style.height = (ourH-50)+'px';" +
                 "d.style.width = newW+'px';" +

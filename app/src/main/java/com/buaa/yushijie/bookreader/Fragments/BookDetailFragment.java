@@ -32,9 +32,6 @@ public class BookDetailFragment extends Fragment {
     private TextView collectionCount;
     private File cache;
     private BookBean book;
-    public BookBean getBook() {
-        return book;
-    }
 
     public void setBook(BookBean book) {
         this.book = book;

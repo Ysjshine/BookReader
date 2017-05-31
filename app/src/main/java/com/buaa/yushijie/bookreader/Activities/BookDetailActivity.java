@@ -38,9 +38,10 @@ public class BookDetailActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_datail_layout);
         currentBook = (BookBean) getIntent().getSerializableExtra(BOOKKEY);
-
+        BookDatailNavigationFragment bookDatailNavigationFragment = new BookDatailNavigationFragment();
+        bookDatailNavigationFragment.setCurrentBook(currentBook);
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.navigation_book_datail_container,new BookDatailNavigationFragment())
+                .add(R.id.navigation_book_datail_container,bookDatailNavigationFragment)
                 .commit();
 
         bookDatailFragment.setBook(currentBook);
