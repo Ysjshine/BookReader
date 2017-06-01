@@ -98,7 +98,7 @@
         android:layout_gravity="center"
         android:text="注销登录"
         android:background="@drawable/border"
-        android:layout_marginTop="113sp"
+        android:layout_marginTop="105sp"
         />
 
     <Button

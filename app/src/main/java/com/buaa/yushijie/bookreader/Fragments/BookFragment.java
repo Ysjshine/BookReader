@@ -1,18 +1,11 @@
 package com.buaa.yushijie.bookreader.Fragments;
 
 import android.content.Intent;
-import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.os.EnvironmentCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -29,15 +22,10 @@ import com.buaa.yushijie.bookreader.Activities.BookDetailActivity;
 import com.buaa.yushijie.bookreader.R;
 import com.buaa.yushijie.bookreader.Services.DownLoadBookInfoService;
 
-import org.w3c.dom.Text;
-
 import java.io.File;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import com.buaa.yushijie.bookreader.Services.AsynTaskLoadImg;
+
+import com.buaa.yushijie.bookreader.Services.AsyncTaskLoadImg;
 import bean.BookBean;
 
 /**
@@ -219,7 +207,7 @@ public class BookFragment extends Fragment {
 
             //download book cover
             DownLoadBookInfoService service = new DownLoadBookInfoService();
-            AsynTaskLoadImg task = new AsynTaskLoadImg(service,mBookCoverImageView,cache);
+            AsyncTaskLoadImg task = new AsyncTaskLoadImg(service,mBookCoverImageView,cache);
             task.execute(book.imgSource);
         }
     }

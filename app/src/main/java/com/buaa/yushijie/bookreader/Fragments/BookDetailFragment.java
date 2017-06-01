@@ -3,7 +3,6 @@ package com.buaa.yushijie.bookreader.Fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.buaa.yushijie.bookreader.R;
-import com.buaa.yushijie.bookreader.Services.AsynTaskLoadImg;
+import com.buaa.yushijie.bookreader.Services.AsyncTaskLoadImg;
 import com.buaa.yushijie.bookreader.Services.DownLoadBookInfoService;
-
-import org.w3c.dom.Text;
 
 import java.io.File;
 
@@ -62,8 +59,18 @@ public class BookDetailFragment extends Fragment {
         collectionCount.setText("收藏数:" + book.collectTimes);
 
         DownLoadBookInfoService service = new DownLoadBookInfoService();
-        AsynTaskLoadImg task = new AsynTaskLoadImg(service,cover,cache);
+        AsyncTaskLoadImg task = new AsyncTaskLoadImg(service,cover,cache);
         task.execute(book.imgSource);
+
+        cover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BookDetailCoverDialogFragment dialog = new BookDetailCoverDialogFragment();
+                dialog.setCurrentBook(book);
+                dialog.setCache(cache);
+                dialog.show(getFragmentManager(),"CompletePicture");
+            }
+        });
         return v;
     }
 }

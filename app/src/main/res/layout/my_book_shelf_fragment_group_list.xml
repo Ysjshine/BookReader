@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="45sp"
             android:textSize="18sp"
-            android:gravity="left|center"
+            android:gravity="start|center"
             android:background="@drawable/textview_border" />
     </LinearLayout>
 

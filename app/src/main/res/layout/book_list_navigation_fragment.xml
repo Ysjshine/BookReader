@@ -18,6 +18,6 @@
        android:text=""
        android:textColor="#000"
        android:textSize="20sp"
-       android:gravity="center"
+       android:gravity="start|center"
        android:layout_weight="1"/>
 </LinearLayout>

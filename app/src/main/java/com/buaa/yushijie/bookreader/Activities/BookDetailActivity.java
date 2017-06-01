@@ -8,11 +8,13 @@ import android.view.View;
 import android.widget.Button;
 
 import com.buaa.yushijie.bookreader.Fragments.BookDetailFragment;
-import com.buaa.yushijie.bookreader.Fragments.BookDatailNavigationFragment;
+import com.buaa.yushijie.bookreader.Fragments.BookDetailNavigationFragment;
 import com.buaa.yushijie.bookreader.Fragments.BookDetailCollectionRecycleDialogFragment;
 import com.buaa.yushijie.bookreader.Fragments.CommentDialogFragment;
 import com.buaa.yushijie.bookreader.Fragments.CommentRecyclerFragment;
 import com.buaa.yushijie.bookreader.R;
+import com.buaa.yushijie.bookreader.Services.TencentListener;
+import com.tencent.tauth.Tencent;
 
 import bean.BookBean;
 
@@ -22,7 +24,7 @@ import bean.BookBean;
  */
 
 public class BookDetailActivity extends FragmentActivity {
-    private BookDetailFragment bookDatailFragment = new BookDetailFragment();
+    private BookDetailFragment bookDetailFragment = new BookDetailFragment();
     private CommentRecyclerFragment commentRecyclerFragment = new CommentRecyclerFragment();
     private final static String BOOKKEY="BOOKITEM";
     private static final String TAG = "comment";
@@ -38,15 +40,15 @@ public class BookDetailActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_datail_layout);
         currentBook = (BookBean) getIntent().getSerializableExtra(BOOKKEY);
-        BookDatailNavigationFragment bookDatailNavigationFragment = new BookDatailNavigationFragment();
-        bookDatailNavigationFragment.setCurrentBook(currentBook);
+        BookDetailNavigationFragment bookDetailNavigationFragment = new BookDetailNavigationFragment();
+        bookDetailNavigationFragment.setCurrentBook(currentBook);
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.navigation_book_datail_container,bookDatailNavigationFragment)
+                .add(R.id.navigation_book_datail_container,bookDetailNavigationFragment)
                 .commit();
 
-        bookDatailFragment.setBook(currentBook);
+        bookDetailFragment.setBook(currentBook);
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.book_detail_fragment_container,bookDatailFragment)
+                .add(R.id.book_detail_fragment_container, bookDetailFragment)
                 .commit();
 
 
@@ -87,5 +89,8 @@ public class BookDetailActivity extends FragmentActivity {
         });
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Tencent.onActivityResultData(requestCode,resultCode,data,new TencentListener(BookDetailActivity.this));
+    }
 }

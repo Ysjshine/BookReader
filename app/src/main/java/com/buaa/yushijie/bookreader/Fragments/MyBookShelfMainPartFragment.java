@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.buaa.yushijie.bookreader.Activities.BookDetailActivity;
 import com.buaa.yushijie.bookreader.R;
-import com.buaa.yushijie.bookreader.Services.AsynTaskLoadImg;
+import com.buaa.yushijie.bookreader.Services.AsyncTaskLoadImg;
 import com.buaa.yushijie.bookreader.Services.CurrentApplication;
 import com.buaa.yushijie.bookreader.Services.DownLoadBookInfoService;
 import com.buaa.yushijie.bookreader.Services.DownLoadMyBookShelfService;
@@ -262,7 +262,7 @@ public class MyBookShelfMainPartFragment extends Fragment implements Serializabl
            // Log.e(TAG, "getChildView: "+bookItemsList.get(groupPosition).get(childPosition).author);
 
             DownLoadBookInfoService service1 = new DownLoadBookInfoService();
-            AsynTaskLoadImg task = new AsynTaskLoadImg(service1,bookItemHolder.cover,cache);
+            AsyncTaskLoadImg task = new AsyncTaskLoadImg(service1,bookItemHolder.cover,cache);
             task.execute(bookItemsList.get(groupPosition).get(childPosition).imgSource);
             return convertView;
         }

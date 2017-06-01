@@ -14,12 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.ViewSwitcher;
 
 import com.buaa.yushijie.bookreader.Activities.BookDetailActivity;
 import com.buaa.yushijie.bookreader.Activities.BookListActivity;
 import com.buaa.yushijie.bookreader.R;
-import com.buaa.yushijie.bookreader.Services.AsynTaskLoadImg;
+import com.buaa.yushijie.bookreader.Services.AsyncTaskLoadImg;
 import com.buaa.yushijie.bookreader.Services.DownLoadBookInfoService;
 import com.buaa.yushijie.bookreader.Services.DownLoadIndexInfo;
 
@@ -51,6 +52,7 @@ public class BookCategoryFragment extends Fragment {
     private ImageView categoryView8;
 
     private ImageSwitcher newsImageSwitch;
+    private ProgressBar newsProgressBar;
     private ArrayList<Uri> urisOfnewsImageSwitch;
     private int selectedItem;
 
@@ -71,12 +73,13 @@ public class BookCategoryFragment extends Fragment {
                 urlArrayList = (ArrayList<String>) msg.obj;
                 for (int i = 0; i < 3; i++) {
                     imageViewArrayList.get(i).setOnClickListener(new ImageClickListener());
-                    AsynTaskLoadImg task = new AsynTaskLoadImg(service, imageViewArrayList.get(i), cache);
+                    AsyncTaskLoadImg task = new AsyncTaskLoadImg(service, imageViewArrayList.get(i), cache);
                     task.execute(urlArrayList.get(i));
                 }
             }else if(msg.what == 2){
                 urisOfnewsImageSwitch = (ArrayList<Uri>)msg.obj;
                 newsImageSwitch.setImageURI(urisOfnewsImageSwitch.get(0));
+                newsProgressBar.setVisibility(View.GONE);
                 selectedItem = 0;
                 Runnable r = new Runnable(){
                     @Override
@@ -139,6 +142,8 @@ public class BookCategoryFragment extends Fragment {
 
         Activity currentActivity = getActivity();
         newsImageSwitch = (ImageSwitcher)v.findViewById(R.id.imageView_switcher);
+        newsProgressBar = (ProgressBar)v.findViewById(R.id.main_activity_news_progress_bar);
+        newsProgressBar.setVisibility(View.VISIBLE);
         newsImageSwitch.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
             public View makeView() {
