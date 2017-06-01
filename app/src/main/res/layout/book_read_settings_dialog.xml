@@ -55,35 +55,5 @@
                 android:text="浅灰"/>
         </RadioGroup>
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:text="字体样式"
-            android:textColor="#FFFFFF"
-            android:textSize="15sp"/>
-        <RadioGroup
-            android:id="@+id/book_read_settings_font_family"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
-                android:text="微软雅黑" />
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
-                android:text="宋体"/>
-        </RadioGroup>
-    </LinearLayout>
 
 </LinearLayout>

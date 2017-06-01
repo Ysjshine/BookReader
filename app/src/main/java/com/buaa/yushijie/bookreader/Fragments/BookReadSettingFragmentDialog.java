@@ -56,7 +56,7 @@ public class BookReadSettingFragmentDialog extends DialogFragment {
         dialog.setContentView(v);
 
         fontSizeEditText = (EditText)v.findViewById(R.id.book_read_settings_font_size_edit_text);
-        fontFamilyRadioGroup = (RadioGroup)v.findViewById(R.id.book_read_settings_font_family);
+//        fontFamilyRadioGroup = (RadioGroup)v.findViewById(R.id.book_read_settings_font_family);
         backgroundColorGroup = (RadioGroup)v.findViewById(R.id.book_read_settings_background_color);
 
         fontSizeEditText.addTextChangedListener(new TextWatcher() {
@@ -79,13 +79,13 @@ public class BookReadSettingFragmentDialog extends DialogFragment {
             }
         });
 
-        fontFamilyRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                String text = ((RadioButton)v.findViewById(group.getCheckedRadioButtonId())).getText().toString();
-                mWebView.getSettings().setSerifFontFamily(text);
-            }
-        });
+//        fontFamilyRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+//                String text = ((RadioButton)v.findViewById(group.getCheckedRadioButtonId())).getText().toString();
+//                mWebView.getSettings().setSerifFontFamily(text);
+//            }
+//        });
 
         backgroundColorGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
