@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.buaa.yushijie.bookreader.MainActivity;
 import com.buaa.yushijie.bookreader.R;
+import com.buaa.yushijie.bookreader.Services.CurrentApplication;
 import com.buaa.yushijie.bookreader.Services.EncodeAndDecode;
 
 import java.io.BufferedReader;
@@ -41,7 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private String gender;
     private static final String TAG="RegisterActivity";
-    private static final String URL_REGISTER="http://120.25.89.166/BookReaderServer/Register";
+    private static final String URL_REGISTER= CurrentApplication.getUrlServer()+"/BookReaderServer/Register";
 
     private Handler handler = new Handler(){
         @Override

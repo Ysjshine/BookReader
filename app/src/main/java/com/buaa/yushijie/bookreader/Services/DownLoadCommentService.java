@@ -16,7 +16,8 @@ import bean.CommentBean;
  */
 
 public class DownLoadCommentService {
-    private static final String URL_DOWNLOAD_COMMENT_INFO="http://120.25.89.166/BookReaderServer/QueryComment";
+    private static final String URL_DOWNLOAD_COMMENT_INFO=CurrentApplication.getUrlServer()+
+            "/BookReaderServer/QueryComment";
 
     private BookBean currentBook;
     private HttpURLConnection conn = null;

@@ -16,7 +16,7 @@
         <EditText
             android:textColor="#FFFFFF"
             android:id="@+id/book_read_settings_font_size_edit_text"
-            android:layout_width="70sp"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:inputType="number"  />
     </LinearLayout>

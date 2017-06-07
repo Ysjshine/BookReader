@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.buaa.yushijie.bookreader.MainActivity;
 import com.buaa.yushijie.bookreader.R;
+import com.buaa.yushijie.bookreader.Services.CurrentApplication;
 import com.buaa.yushijie.bookreader.Services.EncodeAndDecode;
 
 import java.io.BufferedInputStream;
@@ -45,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String PASSWORD_SAVE="Password";
     private static final String USERNAME_SAVE="Username";
 
-    private static final String URL_LOGIN = "http://120.25.89.166/BookReaderServer/Login";
+    private static final String URL_LOGIN = CurrentApplication.getUrlServer()+"/BookReaderServer/Login";
     private static final String TAG="LoginActivity";
     private static final String USERNAME="username";
 

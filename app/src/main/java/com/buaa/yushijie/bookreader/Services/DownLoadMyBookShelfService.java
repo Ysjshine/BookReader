@@ -18,8 +18,8 @@ import bean.UserCategory;
  */
 
 public class DownLoadMyBookShelfService {
-    private static final String URL_GET_BOOK_SHELF_CATEGORY_INFO="http://120.25.89.166/BookReaderServer/QueryUC";
-    private static final String URL_GET_BOOK_SHELF_BOOKBEAN_INFO="http://120.25.89.166/BookReaderServer/QueryCB";
+    private static final String URL_GET_BOOK_SHELF_CATEGORY_INFO=CurrentApplication.getUrlServer()+"/BookReaderServer/QueryUC";
+    private static final String URL_GET_BOOK_SHELF_BOOKBEAN_INFO=CurrentApplication.getUrlServer()+"/BookReaderServer/QueryCB";
     HttpURLConnection conn = null;
     URL url = null;
 

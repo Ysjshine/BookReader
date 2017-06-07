@@ -10,7 +10,7 @@
         android:background="@color/colorNavigationBackground">
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="30sp"
+            android:layout_height="30dp"
             android:layout_weight="2"
             android:text="排序方式"
             android:gravity="center_vertical"

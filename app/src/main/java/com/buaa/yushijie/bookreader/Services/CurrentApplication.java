@@ -24,6 +24,11 @@ public class CurrentApplication extends Application {
     private MyBookShelfMainPartFragment.ExpandableListViewAdapter mAdapter;
     private CommentRecyclerFragment.CommentAdapter currentAdapter;
     private ArrayList<CommentBean> commentBeanArrayList;
+    private static final String URL_SERVER="http://120.25.89.166";
+
+    public static String getUrlServer() {
+        return URL_SERVER;
+    }
 
     public CommentRecyclerFragment.CommentAdapter getCurrentAdapter() {
         return currentAdapter;
