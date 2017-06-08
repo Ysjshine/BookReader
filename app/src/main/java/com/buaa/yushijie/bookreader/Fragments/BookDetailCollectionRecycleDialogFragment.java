@@ -43,10 +43,14 @@ public class BookDetailCollectionRecycleDialogFragment extends DialogFragment {
                     Toast.makeText(currentActivity,"书籍已存在",Toast.LENGTH_SHORT).show();
                 }else if(msg.what == 1){
                     Toast.makeText(currentActivity,"添加成功",Toast.LENGTH_SHORT).show();
-                    CurrentApplication cu = (CurrentApplication)currentActivity.getApplication();
-                    ArrayList<ArrayList<BookBean>> b =  cu.getBookList();
-                    b.get(selectedIndex).add(bookBean);
-                    cu.getAdapter().notifyDataSetChanged();
+                    try {
+                        CurrentApplication cu = (CurrentApplication) currentActivity.getApplication();
+                        ArrayList<ArrayList<BookBean>> b = cu.getBookList();
+                        b.get(selectedIndex).add(bookBean);
+                        cu.getAdapter().notifyDataSetChanged();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }else if(msg.what == 2){
                     Toast.makeText(currentActivity,"网络连接超时",Toast.LENGTH_SHORT).show();
                 }

@@ -40,13 +40,11 @@ public class CategorySetDialogFragment extends DialogFragment {
         public void handleMessage(Message msg) {
             if(msg.what == 0) {
                 if(currentActivity == null) {
-                    Log.e(TAG, "handleMessage: NULLLLLL" );
                 } else {
                     Toast.makeText(currentActivity, "网络连接超时", Toast.LENGTH_SHORT).show();
                 }
             }else if(msg.what == 1){
                 if(currentActivity == null) {
-                    Log.e(TAG, "handleMessage: NULLLLLL" );
                 } else {
                     Toast.makeText(currentActivity, "添加成功", Toast.LENGTH_SHORT).show();
 
